@@ -1,4 +1,4 @@
-package assignment4;
+package assignment5;
 /* CRITTERS Critter.java
  * EE422C Project 4 submission by
  * Phyllis Ang
@@ -74,7 +74,31 @@ public abstract class Critter {
 		myPackage = Critter.class.getPackage().toString().split(" ")[1];
 	}
 	
-	protected final String look(int direction, boolean steps) {return "";}
+	protected final String look(int direction, boolean steps) {
+		energy -= Params.look_energy_cost;
+		int[] location = new int[2];
+		if(is_fighting){
+			location[0] = old_x;
+			location[1] = old_y;
+		}
+		else{
+			location[0] = x_coord;
+			location[1] = y_coord;
+		}
+		
+		
+		if(steps){
+			direction_change(location, direction);
+		}
+		direction_change(location, direction);
+		for(int i = 0; i < population.size(); i++){
+			if(population.get(i).x_coord == location[0] && population.get(i).y_coord == location[1] && population.get(i).energy > 0){
+				return population.get(i).toString();
+			}
+		}
+		
+		return null;
+	}
 
 	/* PROJECT 4 BEGINS HERE */
 
@@ -96,6 +120,8 @@ public abstract class Critter {
 	
 	private int x_coord;
 	private int y_coord;
+	private int old_x;
+	private int old_y;
 	
 	/**
 	 * Allows Critter to move one spot in one time step
@@ -393,11 +419,20 @@ public abstract class Critter {
 		population.clear();
 
 	}
+
+	public static void store_old_location(){
+		for(int i = 0; i < population.size(); i++){
+			population.get(i).old_x = population.get(i).x_coord;
+			population.get(i).old_y = population.get(i).y_coord;
+		}
+	}
 	
 	/**
 	 * Simulate one time step for all the critters 
 	 */
 	public static void worldTimeStep() {
+		//store all of Critter's location before they move
+		store_old_location();		
 		
 		//invoke time steps for each critter 
 		for(int i = 0; i < population.size(); i++){

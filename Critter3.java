@@ -1,4 +1,4 @@
-package assignment4;
+package assignment5;
 /* CRITTERS Critter3.java
  * EE422C Project 4 submission by
  * Phyllis Ang
