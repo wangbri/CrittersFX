@@ -1,4 +1,4 @@
-package assignment4;
+package assignment5;
 /* CRITTERS Critter.java
  * EE422C Project 4 submission by
  * Phyllis Ang
@@ -14,9 +14,16 @@ package assignment4;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.*;
+import javafx.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 /* see the PDF for descriptions of the methods and fields in this class
  * you may add fields, methods or inner classes to Critter ONLY if you make your additions private
@@ -65,9 +72,6 @@ public abstract class Critter {
 	
 	public abstract CritterShape viewShape(); 
 	
-	private static String myPackage;
-	private	static List<Critter> population = new java.util.ArrayList<Critter>();
-	private static List<Critter> babies = new java.util.ArrayList<Critter>();
 
 	// Gets the package name.  This assumes that Critter and its subclasses are all in the same package.
 	static {
@@ -574,44 +578,101 @@ public abstract class Critter {
 		critEncounters.clear();
 	}
 	
+	private static int[] getGridDimensions(GridPane grid) {
+		Method method;
+		Method method2;
+		int[] dimensions = {0,0};
+		
+		try {
+			method = grid.getClass().getDeclaredMethod("getNumberOfRows");
+			method.setAccessible(true);
+			
+			method2 = grid.getClass().getDeclaredMethod("getNumberOfColumns");
+			method2.setAccessible(true);
+			try {
+				dimensions[0] = (int) method.invoke(grid);
+				dimensions[1] = (int) method2.invoke(grid);
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return dimensions;
+	}
+	
+	private static Shape getCritterShape(Critter c, double size) {
+		Shape s = null;
+		CritterShape cs = c.viewShape();
+		
+		switch (cs) {
+			case CIRCLE:
+				s = new Circle(size);
+			case SQUARE:
+				s = new Rectangle(size, size);
+			case TRIANGLE:
+				s = new Polygon();
+				((Polygon) s).getPoints().addAll(
+						0.0, 0.0,
+						size, size,
+						size/2, size
+				);
+			case DIAMOND:
+				s = new Polygon();
+				((Polygon) s).getPoints().addAll(
+						size/2, 0.0,
+						size, size/2,
+						size/2, size,
+						0.0, size/2
+				);
+			case STAR:
+				s = new Polygon();
+				((Polygon) s).getPoints().addAll(
+						size/4, 0.0,
+						size*3/4, 0.0,
+						size, size/2,
+						size/2, size,
+						0.0, size/2
+				);
+		}
+		
+		s.setFill(c.viewFillColor());
+		s.setStroke(c.viewOutlineColor());
+		
+		return s;
+	}
+	
 	/**
 	 * Shows the current state of the Critter World 
 	 */
-	public static void displayWorld() {
-		ArrayList<Character> endlines = new ArrayList<Character>();
-		endlines.add('+');
-		endlines.add('+');
+	public static void displayWorld(Object o) {
+		GridPane grid = (GridPane) o;
+		int rows = getGridDimensions(grid)[0];
+		int cols = getGridDimensions(grid)[1];
+		double size = ((grid.getHeight() - 10*(rows + 1))/rows) - 10;
 		
-		for(int i = 0; i < Params.world_width; i++){
-			endlines.add(1,'-');
-		}
-		
-		StringBuilder border = new StringBuilder(endlines.size());
-	    for(Character ch: endlines)
-	    {
-	        border.append(ch);
-	    }
-		
-		System.out.println(border.toString());
-		for(int y = 0; y < Params.world_height; y++){
-			System.out.print("|");
-			for(int x = 0; x < Params.world_width; x++){
-				boolean critter_there = false;
-				for(int j = 0; j < population.size(); j++){
-					if(population.get(j).x_coord == x && population.get(j).y_coord == y){
-						System.out.print(population.get(j).toString());
-						critter_there = true;
-						break;
+		for (int i = 0; i < cols; i++) {
+			for (int j = 0; j < rows; j++) {
+				for (int c = 0; c < population.size(); c++) {
+					if (population.get(c).x_coord == i && population.get(c).y_coord == j) {
+						Shape s = getCritterShape(population.get(c), size);
+						grid.add(s, i, j);
 					}
 				}
-				if(!critter_there){
-					System.out.print(" ");
-				}
 			}
-			System.out.print("|");
-			System.out.println();
 		}
 		
-		System.out.println(border.toString());
 	}
 }

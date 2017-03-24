@@ -1,4 +1,4 @@
-package assignment4;
+package assignment5;
 /* CRITTERS Critter4.java
  * EE422C Project 4 submission by
  * Phyllis Ang
@@ -61,6 +61,12 @@ public class Critter4 extends Critter{
 			walk(Critter.getRandomInt(8));
 		}
 		return false;
+	}
+
+	@Override
+	public CritterShape viewShape() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
