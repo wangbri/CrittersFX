@@ -44,6 +44,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -169,7 +170,10 @@ public class Main extends Application {
 
 
 		
+		
+		
 		GridPane grid9 = new GridPane();
+		Scene scene9 = new Scene(grid9, 910, 910);
 		//System.out.println(grid.getHeight());
 		//System.out.println(grid.getWidth());
 		
@@ -241,6 +245,7 @@ public class Main extends Application {
 		}
 		
 		primaryStage.setScene(scene);
+		primaryStage.setScene(scene9);
 		//primaryStage.setWidth(570);
 		//primaryStage.setHeight(570);
 		primaryStage.show();
@@ -356,6 +361,7 @@ public class Main extends Application {
 					}
 					critCount--;
 				}
+				Critter.displayWorld(grid9);
 			}
 		});
 		
@@ -525,14 +531,18 @@ public class Main extends Application {
 		
 		grid3.setHgap(15);
 		
-		
+		Menu subsystemsMenu = null;	
 		MenuBar menuBar = new MenuBar();
+		
 		for (int i = 0; i < arr.size(); i++) {
 			CheckMenuItem subsystem1 = new CheckMenuItem("SHOW");
-			Menu subsystemsMenu = new Menu(arr.get(i));
+			subsystemsMenu = new Menu(arr.get(i));
 			subsystemsMenu.getItems().add(subsystem1);
 			menuBar.getMenus().add(subsystemsMenu);
 		}
+		
+		ArrayList<Menu> menuItems = new ArrayList<Menu>(menuBar.getMenus());
+		int subsystemsSize = menuItems.size();
 		
 
 		TextArea statsText = new TextArea();
@@ -543,16 +553,69 @@ public class Main extends Application {
 
 			@Override
 			public void handle(ActionEvent arg0) {
+				String output = "";
+				ArrayList<String> selectedItems = new ArrayList<String>();
+				statsText.clear();
+				
 				ByteArrayOutputStream os = new ByteArrayOutputStream();
-				PrintStream ps = new PrintStream(os);
+				for (int i = 0; i < subsystemsSize; i++) {
+					final MenuItem item = menuItems.get(i).getItems().get(0);
+					
+					if (((CheckMenuItem) item).isSelected()) {
+						selectedItems.add(menuItems.get(i).getText());
+					}
+				}
+				
+				System.out.println(selectedItems);
+				
 				try {
-					String output = os.toString("UTF8");
-					Platform.runLater(() -> statsText.appendText(output));
-					System.out.println("Adsfasdf");
-				} catch (UnsupportedEncodingException e) {
+					for (int i = 0; i < selectedItems.size(); i++) {
+						List<Critter> critList = Critter.getInstances(selectedItems.get(i));
+						Class critterClass = null;
+						Method method = null;
+						
+						try {
+							critterClass = Class.forName(myPackage + "." + selectedItems.get(i));
+							method = critterClass.getMethod("runStats", List.class);
+						} catch (ClassNotFoundException e) {
+							// TODO Auto-generated catch block
+							throw new InvalidCritterException(selectedItems.get(i));
+						} catch (NoSuchMethodException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (SecurityException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						output += method.invoke(critterClass, critList) + "\n";
+					}
+				} catch (InvalidCritterException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
+				//System.out.println(output);
+				
+				final String output1 = output;
+				
+				byte[] b = output1.getBytes();
+				try {
+					os.write(b);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				//String output1 = os.toString("UTF8");
+				Platform.runLater(() -> statsText.appendText(output1));
 			}
 			
 		});
