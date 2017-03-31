@@ -49,13 +49,16 @@ public class Critter4 extends Critter{
 	 * If it encounters any Critter, it tries to reproduce as much as possible before running away
 	 */
 	public boolean fight(String opponent) {
-		//keep reproducing if it has enough energy
+		
 		int directionCount = 0;
 		int direction = Critter.getRandomInt(8);
+
+		//only moves and fight if it is occupied by algae
 		if(look(direction, false).equals("@")){
 			walk(direction);
 			return true;
 		}
+		//Reproduce if it has enough energy
 		else if(getEnergy()>20){
 			Critter4 baby4 = new Critter4();
 			reproduce(baby4,(directionCount+1)%8);

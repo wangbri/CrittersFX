@@ -47,7 +47,8 @@ public class Critter3 extends Critter{
 			turn++;
 		}
 		
-		//change direction and run once it has been walking in that direction for the specified time
+		//change direction once it has been walking in that direction for the specified time
+		//when changing direction, it will only start running if new location is occupied by a algae 
 		else{
 			turn = 0;
 			direction = Critter.getRandomInt(8);

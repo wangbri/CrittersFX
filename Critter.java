@@ -83,26 +83,38 @@ public abstract class Critter {
 		myPackage = Critter.class.getPackage().toString().split(" ")[1];
 	}
 	
+	/**
+	 * The function looks to see if location is occupied by another Critter
+	 * @param direction: The direction the Critter will move in
+	 * @param steps: true if looking 2 steps away, false if looking 1 step away 
+	 * @return the toString of the Critter at that location or an empty string if there is no Critter there
+	 */
 	protected final String look(int direction, boolean steps) {
 		energy -= Params.look_energy_cost;
-		int[] location = new int[2];
-		if(is_fighting){
-			location[0] = old_x;
-			location[1] = old_y;
-		}
-		else{
-			location[0] = x_coord;
-			location[1] = y_coord;
-		}
+		int[] location = new int[2];//store the x and y coordinates of Critter
+
+		location[0] = x_coord;
+		location[1] = y_coord;
 		
-		
+		//change the x and y coordinate twice if steps is true 
 		if(steps){
 			direction_change(location, direction);
 		}
 		direction_change(location, direction);
+
+		//look through the population array to see if any Critter is at that location
 		for(int i = 0; i < population.size(); i++){
-			if(population.get(i).x_coord == location[0] && population.get(i).y_coord == location[1] && population.get(i).energy > 0){
-				return population.get(i).toString();
+			if(is_fighting){
+				if(population.get(i).x_coord == location[0] && population.get(i).y_coord == location[1] && population.get(i).energy > 0){
+					return population.get(i).toString();
+				}
+			}
+
+			//look at position before all Critters move if not fighting
+			else{
+				if(population.get(i).old_x == location[0] && population.get(i).old_y == location[1] && population.get(i).energy > 0){
+					return population.get(i).toString();
+				}	
 			}
 		}
 		
