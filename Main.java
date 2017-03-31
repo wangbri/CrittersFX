@@ -56,6 +56,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.animation.AnimationTimer;
+import javafx.geometry.Insets;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 
 /*
@@ -73,6 +77,7 @@ public class Main extends Application {
     static PrintStream old = System.out;	// if you want to restore output to console
 
     static ArrayList<String> arr = new ArrayList<String>();
+    private final static int[] speed = {0};
 
     // Gets the package name.  The usage assumes that Critter and its subclasses are all in the same package.
     static {
@@ -269,6 +274,7 @@ public class Main extends Application {
     
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		final AnimationTimer timer; // sets up the animation timer
 		// TODO Auto-generated method stub
 		GridPane grid = new GridPane();
 		
@@ -406,11 +412,23 @@ public class Main extends Application {
 		animSpeed.setShowTickLabels(true);
 		animSpeed.setMajorTickUnit(2);
 		animSpeed.setSnapToTicks(true);
+
+		//animSpeed handler
+
 		
-		
-		
+		//set Seed
 		Button seedBut = new Button();
 		seedBut.setText("SUBMIT");
+
+		seedBut.setOnAction(new EventHandler<ActionEvent>() { // what to do when butt is pressed
+			@Override
+			public void handle(ActionEvent event) {
+				String prompt = seedText.getText();
+				int seed = Integer.parseInt(prompt);
+				System.out.println(seed);
+				Critter.setSeed(seed);
+			}
+		});
 		
 		Button critBut = new Button();
 		critBut.setText("SUBMIT");
@@ -432,14 +450,121 @@ public class Main extends Application {
 			
 		});
 		
+		//time steps
 		Button timeBut = new Button();
 		timeBut.setText("SUBMIT");
+
+		timeBut.setOnAction(new EventHandler<ActionEvent>() { // what to do when butt is pressed
+			@Override
+			public void handle(ActionEvent event) {
+				String prompt = timeText.getText();
+				int times = 0;
+				int count = 0;
+				if(prompt.equals("")){
+					times = 1;
+				}
+				else{
+					times = Integer.parseInt(prompt);
+				}
+				while (count < times) {
+					Critter.worldTimeStep();
+					count++;
+				}
+				//displayworld and runStats
+			}
+		});
 		
+		//quit
 		Button quitBut = new Button();
 		quitBut.setText("QUIT");
-		
+
+		quitBut.setOnAction(new EventHandler<ActionEvent>() { // what to do when butt is pressed
+			@Override
+			public void handle(ActionEvent event) {
+				System.exit(0);
+			}
+		});
+
+
+		//Sets up animation 
 		Button startAnimBut = new Button();
-		startAnimBut.setText("START/STOP ANIMATING");
+		startAnimBut.setText("START ANIMATING");
+
+		Button endAnimBut = new Button();
+		endAnimBut.setText("STOP ANIMATING");
+		endAnimBut.setDisable(true);
+
+		timer = new AnimationTimer() {
+			@Override
+		    public void handle(long now) {
+				animSpeed.valueProperty().addListener(new ChangeListener<Number>() {
+					public void changed(ObservableValue<? extends Number> ov,
+							Number old_val, Number new_val) {
+						    speed[0] = (int)new_val.doubleValue();
+						            	 
+					}
+				});
+						
+				int count = speed[0];
+				for(int i = 0; i < count; i++){
+					Critter.worldTimeStep();
+				}
+				System.out.println(count);
+				//TODO: run stats and display world
+			}
+		};//.start();
+			
+				
+		endAnimBut.setOnAction(new EventHandler<ActionEvent>() { // what to do when butt is pressed
+			@Override
+			public void handle(ActionEvent event) {
+				//animation[0] = false;
+				timer.stop();
+				
+				//enable the makeCritter button and dropdown 
+				cb.setDisable(false);
+				critBut.setDisable(false);
+				critText.setDisable(false);
+				
+				//enable the timeStep button and textbox
+				timeBut.setDisable(false);
+				timeText.setDisable(false);
+					
+				//enable the setSeed button and textbox
+				seedBut.setDisable(false);
+				seedText.setDisable(false);
+				
+				//disable end animation button
+				endAnimBut.setDisable(true);
+			}
+			
+		});
+			
+			
+		startAnimBut.setOnAction(new EventHandler<ActionEvent>() { // what to do when butt is pressed
+			@Override
+			public void handle(ActionEvent event) { 
+				//animation[0] = true;
+				timer.start();
+					
+				//gray out the makeCritter button and dropdown 
+				cb.setDisable(true);
+				critBut.setDisable(true);
+				critText.setDisable(true);
+				
+				//gray out the timeStep button and textbox
+				timeBut.setDisable(true);
+				timeText.setDisable(true);
+					
+				//gray out the setSeed button and textbox
+				seedBut.setDisable(true);
+				seedText.setDisable(true);
+				
+				//enable stop animation button
+				endAnimBut.setDisable(false);
+			}
+				
+		});
 		
 		grid2.setPadding(new Insets(10, 25, 10, 25));
 		grid2.addRow(0, new Label("SET SEED"), seedText, seedBut);
@@ -448,7 +573,8 @@ public class Main extends Application {
 		grid2.addRow(3);
 		grid2.addRow(4, new Label("SET TIMESTEPS"), timeText, timeBut);
 		grid2.addRow(5, new Label("SET ANIMATION SPEED"), animSpeed);
-		grid2.add(startAnimBut, 1, 6);
+		grid2.add(startAnimBut, 0, 6);
+		grid2.add(endAnimBut, 1, 6);
 		grid2.addRow(7);
 		grid2.addRow(8, quitBut);
 		
