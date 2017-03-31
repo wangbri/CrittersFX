@@ -75,5 +75,8 @@ public class Craig extends Critter {
 
 	@Override
 	public javafx.scene.paint.Color viewOutlineColor() { return javafx.scene.paint.Color.BLUE; }
+	
+	@Override
+	public javafx.scene.paint.Color viewFillColor() { return javafx.scene.paint.Color.BLUE; }
 
 }

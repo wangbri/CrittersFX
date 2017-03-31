@@ -32,13 +32,17 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -246,7 +250,7 @@ public class Main extends Application {
         /* Write your code above */
         //System.out.flush();
     	String assignmentPath = System.getProperty("user.dir") + "\\src\\" + myPackage;
-		System.out.println("Working Directory = " + assignmentPath);
+		//System.out.println("Working Directory = " + assignmentPath);
 		
 		File f = new File(assignmentPath);
 		
@@ -257,7 +261,7 @@ public class Main extends Application {
 				try {
 					Critter.getCritterFromString(myPackage + "." + fileName);
 					arr.add(fileName);
-					System.out.println(fileName);
+					//System.out.println(fileName);
 				} catch (InvalidCritterException e) {
 					// TODO Auto-generated catch block
 					//e.printStackTrace();
@@ -288,17 +292,10 @@ public class Main extends Application {
 		
 		Scene scene = new Scene(grid, 910, 910);
 		
-		grid.setPrefHeight(910);
-		grid.setPrefWidth(910);
-		AnchorPane.setBottomAnchor(grid, 0.0);
-		AnchorPane.setLeftAnchor(grid, 0.0);
-		AnchorPane.setRightAnchor(grid, 0.0);
-		AnchorPane.setTopAnchor(grid, 0.0);
-		
 		int gridSize = 900 - 10*row;
 		
-		System.out.println(grid.getHeight());
-		System.out.println(grid.getWidth());
+		//System.out.println(grid.getHeight());
+		//System.out.println(grid.getWidth());
 		
 		ColumnConstraints column1 = new ColumnConstraints(gridSize/row);
 		for (int i = 0; i < row; i++) {
@@ -351,6 +348,19 @@ public class Main extends Application {
 		//primaryStage.setWidth(570);
 		//primaryStage.setHeight(570);
 		primaryStage.show();
+		
+		grid.setGridLinesVisible(true);
+		
+		Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+
+		 //set Stage boundaries to visible bounds of the main screen
+		primaryStage.setX(primaryScreenBounds.getMinX());
+		primaryStage.setY(primaryScreenBounds.getMinY());
+		//primaryStage.setWidth(primaryScreenBounds.getWidth());
+		//primaryStage.setHeight(primaryScreenBounds.getHeight());
+
+		primaryStage.show();
+		 
 		
 		GridPane grid2 = new GridPane();
 		//grid2.setGridLinesVisible(true);
@@ -412,6 +422,10 @@ public class Main extends Application {
 		animSpeed.setShowTickLabels(true);
 		animSpeed.setMajorTickUnit(2);
 		animSpeed.setSnapToTicks(true);
+		
+		Critter.makeCritter("Craig");
+		Critter.makeCritter("Algae");
+		Critter.displayWorld(grid);
 
 		//animSpeed handler
 
@@ -433,21 +447,19 @@ public class Main extends Application {
 		Button critBut = new Button();
 		critBut.setText("SUBMIT");
 		critBut.setOnAction(new EventHandler<ActionEvent>(){
-
 			@Override
 			public void handle(ActionEvent arg0) {
 				int critCount = Integer.parseInt(critText.getText());
 				// TODO Auto-generated method stub
 				while (critCount > 0) {
 					try {
-						Critter.makeCritter(myPackage + "." + cb.getButtonCell());
+						Critter.makeCritter(cb.getValue().toString());
 					} catch (InvalidCritterException e) {
 						// TODO Auto-generated catch block
 					}
 					critCount--;
 				}
 			}
-			
 		});
 		
 		//time steps
@@ -596,31 +608,28 @@ public class Main extends Application {
 		grid3.setVgap(10);
 		grid3.setPadding(new Insets(10, 25, 10, 25));
 		
-//		List<Critter> critList = Critter.getInstances(inputArgs.get(1));
-//		Class critterClass;
-//		Method method;
-//		
-//		try {
-//			critterClass = Class.forName(myPackage + "." + inputArgs.get(1));
-//			method = critterClass.getMethod("runStats", List.class);
-//		} catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			throw new InvalidCritterException(inputArgs.get(1));
-//		}
-//		
-//		method.invoke(critterClass, critList);
-		
 		Stage tertiaryStage = new Stage();
 		tertiaryStage.setScene(scene3);
 		tertiaryStage.show();
 		
-		ComboBox cb2 = new ComboBox();
-		System.out.println(arr.toString());
-		cb2.getItems().addAll(arr);
+		CheckMenuItem subsystem1 = new CheckMenuItem("Enabled");
+		subsystem1.setOnAction(new EventHandler<ActionEvent>() {
+		    public void handle(ActionEvent e) {
+		        System.out.println("subsystem1 #1 Enabled!");
+		    }
+		});
+
+		MenuBar menuBar = new MenuBar();	
+		Menu subsystemsMenu = new Menu("Subsystems");
+		subsystemsMenu.getItems().add(subsystem1);
+		menuBar.getMenus().add(subsystemsMenu);
+		//statsMenu.getMenus().addAll(menu1, menu1);
+		//System.out.println(arr.toString());
+		//statsMenu.getItems().addAll(arr);
 		
 		TextArea statsText = new TextArea();
 		
-		grid3.addRow(0, cb2);
+		grid3.addRow(0, menuBar);
 		grid3.addRow(1,  statsText);
 		// Set position of the windows on the screen
 		

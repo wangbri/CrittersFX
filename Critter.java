@@ -19,6 +19,9 @@ import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.*;
 import javafx.*;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
@@ -654,9 +657,11 @@ public abstract class Critter {
 		
 		switch (cs) {
 			case CIRCLE:
-				s = new Circle(size);
+				s = new Circle(size/2);
+				break;
 			case SQUARE:
 				s = new Rectangle(size, size);
+				break;
 			case TRIANGLE:
 				s = new Polygon();
 				((Polygon) s).getPoints().addAll(
@@ -664,6 +669,7 @@ public abstract class Critter {
 						size, size,
 						size/2, size
 				);
+				break;
 			case DIAMOND:
 				s = new Polygon();
 				((Polygon) s).getPoints().addAll(
@@ -672,6 +678,7 @@ public abstract class Critter {
 						size/2, size,
 						0.0, size/2
 				);
+				break;
 			case STAR:
 				s = new Polygon();
 				((Polygon) s).getPoints().addAll(
@@ -681,6 +688,7 @@ public abstract class Critter {
 						size/2, size,
 						0.0, size/2
 				);
+				break;
 		}
 		
 		s.setFill(c.viewFillColor());
@@ -697,13 +705,17 @@ public abstract class Critter {
 		int rows = getGridDimensions(grid)[0];
 		int cols = getGridDimensions(grid)[1];
 		double size = ((grid.getHeight() - 10*(rows + 1))/rows) - 10;
+		double colSize = grid.getColumnConstraints().get(0).getPrefWidth();
 		
 		for (int i = 0; i < cols; i++) {
 			for (int j = 0; j < rows; j++) {
 				for (int c = 0; c < population.size(); c++) {
 					if (population.get(c).x_coord == i && population.get(c).y_coord == j) {
 						Shape s = getCritterShape(population.get(c), size);
+						//System.out.println(population.get(c).viewShape());
 						grid.add(s, i, j);
+						grid.setHalignment(s, HPos.CENTER);
+						grid.setValignment(s, VPos.CENTER);
 					}
 				}
 			}
