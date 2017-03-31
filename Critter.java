@@ -724,7 +724,7 @@ public abstract class Critter {
 		int rows = getGridDimensions(grid)[0];
 		int cols = getGridDimensions(grid)[1];
 		double size = ((grid.getHeight() - 10*(rows + 1))/rows) - 10;
-		double colSize = grid.getColumnConstraints().get(0).getPrefWidth();
+		//double colSize = grid.getColumnConstraints().get(0).getPrefWidth();
 		
 		for (int i = 0; i < cols; i++) {
 			for (int j = 0; j < rows; j++) {
