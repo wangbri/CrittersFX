@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.*;
 import javafx.*;
 import javafx.geometry.HPos;
+import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -27,6 +28,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.stage.Screen;
 
 /* see the PDF for descriptions of the methods and fields in this class
  * you may add fields, methods or inner classes to Critter ONLY if you make your additions private
@@ -721,17 +723,14 @@ public abstract class Critter {
 	 */
 	public static void displayWorld(Object o) {
 		GridPane grid = (GridPane) o;
-		//int rows = getGridDimensions(grid)[0];
-		//int cols = getGridDimensions(grid)[1];
-		double size = (900 - Params.world_width*2)/Params.world_width - 2;
-		//double colSize = grid.getColumnConstraints().get(0).getPrefWidth();
+		Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+		int gridSize = (int) (screenBounds.getWidth()/2 - Params.world_width*2); //900
 		
 		for (int i = 0; i < Params.world_width; i++) {
 			for (int j = 0; j < Params.world_height; j++) {
 				for (int c = 0; c < population.size(); c++) {
 					if (population.get(c).x_coord == i && population.get(c).y_coord == j) {
-						Shape s = getCritterShape(population.get(c), size);
-						//System.out.println(population.get(c).viewShape());
+						Shape s = getCritterShape(population.get(c), gridSize/Params.world_width);
 						grid.add(s, i, j);
 						GridPane.setHalignment(s, HPos.CENTER);
 						GridPane.setValignment(s, VPos.CENTER);

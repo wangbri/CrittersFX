@@ -110,7 +110,7 @@ public class Main extends Application {
 			
 		int row = Params.world_height;	
 		int col = Params.world_width;
-		int gridSize = (int) (screenBounds.getWidth()/2 - col*2); //900
+		int gridSize = (int) (screenBounds.getWidth()/2); //900
 		
 		
 		//squaresGrid.setGridLinesVisible(true);
@@ -126,14 +126,14 @@ public class Main extends Application {
 	         squaresGrid.getRowConstraints().add(row1);
 	    }
 		
-		squaresGrid.setHgap(2);
-		squaresGrid.setVgap(2);	
+//		squaresGrid.setHgap(2);
+//		squaresGrid.setVgap(2);	
 		//squaresGrid.setPadding(new Insets(2, 2, 2, 2));
 		squaresGrid.setAlignment(Pos.CENTER);
 		
 		
 		// Add squares for background
-		
+		ArrayList<Rectangle> rectArr = new ArrayList<Rectangle>();
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
 				Rectangle rect = new Rectangle(gridSize/col, gridSize/col);
@@ -142,23 +142,26 @@ public class Main extends Application {
 				rect.setStrokeWidth(.5);
 				
 	            squaresGrid.add(rect, i, j);
+	            rectArr.add(rect);
 			}
 		}
 		
+		squaresGrid.getChildren().retainAll(rectArr);
 		
-		ColumnConstraints column9 = new ColumnConstraints(gridSize/row); //700
-		for (int i = 0; i < col; i++) {
-	         critGrid.getColumnConstraints().add(column9);
-	    }
 		
-		RowConstraints row9 = new RowConstraints(gridSize/row); //700
-		for (int i = 0; i < row; i++) {
-	         critGrid.getRowConstraints().add(row9);
-	    }
-		
-		critGrid.setHgap(10);
-		critGrid.setVgap(10);		
-		critGrid.setPadding(new Insets(10, 10, 10, 10));
+//		ColumnConstraints column9 = new ColumnConstraints(gridSize/row); //700
+//		for (int i = 0; i < col; i++) {
+//	         critGrid.getColumnConstraints().add(column9);
+//	    }
+//		
+//		RowConstraints row9 = new RowConstraints(gridSize/row); //700
+//		for (int i = 0; i < row; i++) {
+//	         critGrid.getRowConstraints().add(row9);
+//	    }
+//		
+//		critGrid.setHgap(10);
+//		critGrid.setVgap(10);		
+//		critGrid.setPadding(new Insets(10, 10, 10, 10));
 		
 		ColumnConstraints column2 = new ColumnConstraints(200);
 		ColumnConstraints column3 = new ColumnConstraints(100);
@@ -396,7 +399,10 @@ public class Main extends Application {
 					}
 					critCount--;
 				}
-				Critter.displayWorld(critGrid);
+				
+				squaresGrid.getChildren().retainAll(rectArr);
+				Critter.displayWorld(squaresGrid);
+				critBut.fire();
 			}
 		});
 		
@@ -421,18 +427,19 @@ public class Main extends Application {
 					count++;
 				}
 				
-				for (int i = 0; i < row; i++) {
-					for (int j = 0; j < col; j++) {
-						Rectangle rect = new Rectangle(gridSize/col, gridSize/col);
-						rect.setFill(javafx.scene.paint.Color.WHITE);
-						rect.setStroke(javafx.scene.paint.Color.LIGHTGREY);
-						rect.setStrokeWidth(.5);
-						
-			            squaresGrid.add(rect, i, j);
-					}
-				}
+//				for (int i = 0; i < row; i++) {
+//					for (int j = 0; j < col; j++) {
+//						Rectangle rect = new Rectangle(gridSize/col, gridSize/col);
+//						rect.setFill(javafx.scene.paint.Color.WHITE);
+//						rect.setStroke(javafx.scene.paint.Color.LIGHTGREY);
+//						rect.setStrokeWidth(.5);
+//						
+//			            squaresGrid.add(rect, i, j);
+//					}
+//				}
 				
 				//TODO: displayworld and runStats
+				squaresGrid.getChildren().retainAll(rectArr);
 				Critter.displayWorld(squaresGrid);
 				statsBut.fire();
 			}
@@ -480,16 +487,8 @@ public class Main extends Application {
 				} catch (InterruptedException ie) {
 					    //Handle exception
 				}
-				for (int i = 0; i < row; i++) {
-					for (int j = 0; j < col; j++) {
-						Rectangle rect = new Rectangle(gridSize/col, gridSize/col);
-						rect.setFill(javafx.scene.paint.Color.WHITE);
-						rect.setStroke(javafx.scene.paint.Color.LIGHTGREY);
-						rect.setStrokeWidth(.5);
-						
-			            squaresGrid.add(rect, i, j);
-					}
-				}
+
+				squaresGrid.getChildren().retainAll(rectArr);
 				Critter.displayWorld(squaresGrid);
 				Critter.worldTimeStep();
 				statsBut.fire();
