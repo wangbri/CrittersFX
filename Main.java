@@ -41,6 +41,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -101,7 +103,6 @@ public class Main extends Application {
 	@Override
 	public void start(Stage gridStage) throws Exception {
 		final AnimationTimer timer; // sets up the animation timer
-		GridPane squaresGrid = new GridPane();
 		GridPane critGrid = new GridPane();
 		GridPane settGrid = new GridPane();
 		GridPane statsGrid = new GridPane();
@@ -113,23 +114,23 @@ public class Main extends Application {
 		int gridSize = (int) (screenBounds.getWidth()/2); //900
 		
 		
-		//squaresGrid.setGridLinesVisible(true);
+		//critGrid.setGridLinesVisible(true);
 		// Set up constraints for grids
 		
 		ColumnConstraints column1 = new ColumnConstraints(gridSize/col); //700
 		for (int i = 0; i < col; i++) {
-	         squaresGrid.getColumnConstraints().add(column1);
+	         critGrid.getColumnConstraints().add(column1);
 	    }
 		
 		RowConstraints row1 = new RowConstraints(gridSize/col); //700
 		for (int i = 0; i < row; i++) {
-	         squaresGrid.getRowConstraints().add(row1);
+	         critGrid.getRowConstraints().add(row1);
 	    }
 		
-//		squaresGrid.setHgap(2);
-//		squaresGrid.setVgap(2);	
-		//squaresGrid.setPadding(new Insets(2, 2, 2, 2));
-		squaresGrid.setAlignment(Pos.CENTER);
+//		critGrid.setHgap(2);
+//		critGrid.setVgap(2);	
+		//critGrid.setPadding(new Insets(2, 2, 2, 2));
+		critGrid.setAlignment(Pos.CENTER);
 		
 		
 		// Add squares for background
@@ -141,12 +142,12 @@ public class Main extends Application {
 				rect.setStroke(javafx.scene.paint.Color.LIGHTGREY);
 				rect.setStrokeWidth(.5);
 				
-	            squaresGrid.add(rect, i, j);
+	            critGrid.add(rect, i, j);
 	            rectArr.add(rect);
 			}
 		}
 		
-		squaresGrid.getChildren().retainAll(rectArr);
+		critGrid.getChildren().retainAll(rectArr);
 		
 		
 //		ColumnConstraints column9 = new ColumnConstraints(gridSize/row); //700
@@ -163,41 +164,39 @@ public class Main extends Application {
 //		critGrid.setVgap(10);		
 //		critGrid.setPadding(new Insets(10, 10, 10, 10));
 		
-		ColumnConstraints column2 = new ColumnConstraints(200);
-		ColumnConstraints column3 = new ColumnConstraints(100);
+		ColumnConstraints column2 = new ColumnConstraints();
+		column2.setPercentWidth(40);
 
         settGrid.getColumnConstraints().add(column2);
         settGrid.getColumnConstraints().add(column2);
-        settGrid.getColumnConstraints().add(column3);
-        
-		RowConstraints row2 = new RowConstraints(50);
-		RowConstraints row3 = new RowConstraints(30);
-		RowConstraints row3a = new RowConstraints(5);
+
+		RowConstraints row2 = new RowConstraints();
+		row2.setPercentHeight(100/10);
 		
-		settGrid.getRowConstraints().add(row2);
-		settGrid.getRowConstraints().add(row2);
-		settGrid.getRowConstraints().add(row3);
-		settGrid.getRowConstraints().add(row3a);
-		settGrid.getRowConstraints().add(row2);
-		settGrid.getRowConstraints().add(row2);
-		settGrid.getRowConstraints().add(row3);
-		settGrid.setHgap(20);
-		settGrid.setVgap(20);
+		for (int i = 0; i < 10; i++) {
+			settGrid.getRowConstraints().add(row2);
+		}
+		
+		settGrid.setHgap(15);
+		settGrid.setVgap(15);
 		
 
 		
 		RowConstraints row4 = new RowConstraints(50);
 		RowConstraints row5 = new RowConstraints();
+		ColumnConstraints col6 = new ColumnConstraints();
+		col6.setPercentWidth(100);
         
         statsGrid.getRowConstraints().add(row4);
         statsGrid.getRowConstraints().add(row5);
+        statsGrid.getColumnConstraints().add(col6);
         
-		statsGrid.setPadding(new Insets(10, 25, 10, 25));
+		statsGrid.setPadding(new Insets(10));
 		
 		
 		// Set up scenes/stages
 		
-		Scene critScene = new Scene(squaresGrid, screenBounds.getWidth()/2, screenBounds.getWidth()/2); //902
+		Scene critScene = new Scene(critGrid, screenBounds.getWidth()/2, screenBounds.getWidth()/2); //902
 		gridStage.setScene(critScene);
 		gridStage.show();
 		
@@ -386,10 +385,15 @@ public class Main extends Application {
 		critBut.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent arg0) {
-				int critCount = Integer.parseInt(critText.getText());
-				if(critText.getText().equals("")){
+				String prompt = critText.getText();
+				int critCount = 0;
+				
+				if(prompt.equals("")){
 					critCount = 1;
+				} else {
+					critCount = Integer.parseInt(prompt);
 				}
+				
 				// TODO Auto-generated method stub
 				while (critCount > 0) {
 					try {
@@ -400,9 +404,9 @@ public class Main extends Application {
 					critCount--;
 				}
 				
-				squaresGrid.getChildren().retainAll(rectArr);
-				Critter.displayWorld(squaresGrid);
-				critBut.fire();
+				critGrid.getChildren().retainAll(rectArr);
+				Critter.displayWorld(critGrid);
+				statsBut.fire();
 			}
 		});
 		
@@ -434,13 +438,13 @@ public class Main extends Application {
 //						rect.setStroke(javafx.scene.paint.Color.LIGHTGREY);
 //						rect.setStrokeWidth(.5);
 //						
-//			            squaresGrid.add(rect, i, j);
+//			            critGrid.add(rect, i, j);
 //					}
 //				}
 				
 				//TODO: displayworld and runStats
-				squaresGrid.getChildren().retainAll(rectArr);
-				Critter.displayWorld(squaresGrid);
+				critGrid.getChildren().retainAll(rectArr);
+				Critter.displayWorld(critGrid);
 				statsBut.fire();
 			}
 		});
@@ -488,8 +492,8 @@ public class Main extends Application {
 					    //Handle exception
 				}
 
-				squaresGrid.getChildren().retainAll(rectArr);
-				Critter.displayWorld(squaresGrid);
+				critGrid.getChildren().retainAll(rectArr);
+				Critter.displayWorld(critGrid);
 				Critter.worldTimeStep();
 				statsBut.fire();
 
@@ -554,20 +558,23 @@ public class Main extends Application {
 			}
 				
 		});
+
+		Line line = new Line(0, 0, settGrid.getWidth(), 0);
+	    line.setStroke(Color.LIGHTGRAY);
 		
-		
-		settGrid.setPadding(new Insets(10, 25, 10, 25));
+		//settGrid.setPadding(new Insets(10, 20, 10, 20));
 		settGrid.addRow(0, new Label("SET SEED"), seedText, seedBut);
 		settGrid.addRow(1, new Label("ADD CRITTER"), cb, critBut);
 		settGrid.add(critText, 1, 2);
-		settGrid.addRow(3);
+		settGrid.addRow(3, line);
 		settGrid.addRow(4, new Label("SET TIMESTEPS"), timeText, timeBut);
 		settGrid.addRow(5, new Label("SET ANIMATION SPEED"), animSpeed);
 		settGrid.add(startAnimBut, 0, 6);
 		settGrid.add(endAnimBut, 1, 6);
 		settGrid.addRow(7);
-		settGrid.addRow(8, quitBut);
-		
+		settGrid.addRow(8, quitBut);	
+		settGrid.setAlignment(Pos.TOP_CENTER);
+		settGrid.setGridLinesVisible(true);
 		
 		statsGrid.add(menuBar, 0, 0);
 		statsGrid.add(statsText, 0, 1);
