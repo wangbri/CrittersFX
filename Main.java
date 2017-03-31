@@ -22,7 +22,9 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -103,56 +105,60 @@ public class Main extends Application {
 		GridPane critGrid = new GridPane();
 		GridPane settGrid = new GridPane();
 		GridPane statsGrid = new GridPane();
+		
+		Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
 			
-		int row = 30;	
-		int gridSize = 900 - (row/2)*row;
+		int row = Params.world_height;	
+		int col = Params.world_width;
+		int gridSize = (int) (screenBounds.getWidth()/2 - col*2); //900
 		
 		
+		//squaresGrid.setGridLinesVisible(true);
 		// Set up constraints for grids
 		
-		ColumnConstraints column1 = new ColumnConstraints(gridSize/row); //700
-		for (int i = 0; i < row; i++) {
+		ColumnConstraints column1 = new ColumnConstraints(gridSize/col); //700
+		for (int i = 0; i < col; i++) {
 	         squaresGrid.getColumnConstraints().add(column1);
 	    }
 		
-		RowConstraints row1 = new RowConstraints(gridSize/row); //700
+		RowConstraints row1 = new RowConstraints(gridSize/col); //700
 		for (int i = 0; i < row; i++) {
 	         squaresGrid.getRowConstraints().add(row1);
 	    }
 		
-		squaresGrid.setHgap(row/4);
-		squaresGrid.setVgap(row/4);	
-		squaresGrid.setPadding(new Insets(row/2, row/2, row/2, row/2));
+		squaresGrid.setHgap(2);
+		squaresGrid.setVgap(2);	
+		//squaresGrid.setPadding(new Insets(2, 2, 2, 2));
+		squaresGrid.setAlignment(Pos.CENTER);
 		
 		
 		// Add squares for background
 		
 		for (int i = 0; i < row; i++) {
-			for (int j = 0; j < row; j++) {
-				Rectangle rect = new Rectangle(gridSize/row, gridSize/row);
+			for (int j = 0; j < col; j++) {
+				Rectangle rect = new Rectangle(gridSize/col, gridSize/col);
 				rect.setFill(javafx.scene.paint.Color.WHITE);
-				rect.setStroke(javafx.scene.paint.Color.BLACK);
-				rect.setStrokeWidth(2);
+				rect.setStroke(javafx.scene.paint.Color.LIGHTGREY);
+				rect.setStrokeWidth(.5);
 				
 	            squaresGrid.add(rect, i, j);
 			}
 		}
 		
 		
-//		ColumnConstraints column9 = new ColumnConstraints(gridSize/row); //700
-//		for (int i = 0; i < row; i++) {
-//	         critGrid.getColumnConstraints().add(column1);
-//	    }
-//		
-//		RowConstraints row9 = new RowConstraints(gridSize/row); //700
-//		for (int i = 0; i < row; i++) {
-//	         critGrid.getRowConstraints().add(row1);
-//	    }
+		ColumnConstraints column9 = new ColumnConstraints(gridSize/row); //700
+		for (int i = 0; i < col; i++) {
+	         critGrid.getColumnConstraints().add(column9);
+	    }
+		
+		RowConstraints row9 = new RowConstraints(gridSize/row); //700
+		for (int i = 0; i < row; i++) {
+	         critGrid.getRowConstraints().add(row9);
+	    }
 		
 		critGrid.setHgap(10);
 		critGrid.setVgap(10);		
 		critGrid.setPadding(new Insets(10, 10, 10, 10));
-		
 		
 		ColumnConstraints column2 = new ColumnConstraints(200);
 		ColumnConstraints column3 = new ColumnConstraints(100);
@@ -175,46 +181,45 @@ public class Main extends Application {
 		settGrid.setHgap(20);
 		settGrid.setVgap(20);
 		
+
 		
 		RowConstraints row4 = new RowConstraints(50);
-		RowConstraints row5 = new RowConstraints(220);
+		RowConstraints row5 = new RowConstraints();
         
         statsGrid.getRowConstraints().add(row4);
         statsGrid.getRowConstraints().add(row5);
         
-        ColumnConstraints column4 = new ColumnConstraints(450);
-        
-        statsGrid.getColumnConstraints().add(column4);
 		statsGrid.setPadding(new Insets(10, 25, 10, 25));
 		
 		
 		// Set up scenes/stages
 		
-		Scene critScene = new Scene(squaresGrid, 910, 910);
+		Scene critScene = new Scene(squaresGrid, screenBounds.getWidth()/2, screenBounds.getWidth()/2); //902
 		gridStage.setScene(critScene);
 		gridStage.show();
 		
-		Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-		gridStage.setX(primaryScreenBounds.getMinX());
-		gridStage.setY(primaryScreenBounds.getMinY());
+		
+		// Set up screen bounds/window positioning
+		
+		
+
+		gridStage.setX(screenBounds.getMinX());
+		gridStage.setY(screenBounds.getMinY());
 		gridStage.show();
 		
-		Scene settScene = new Scene(settGrid, 590, 480);
+		Scene settScene = new Scene(settGrid, gridStage.getWidth()*3/5, gridStage.getHeight()/2);
 		Stage settStage = new Stage();
 		settStage.setScene(settScene);
 		settStage.show();
 		
 		
-		Scene statsScene = new Scene(statsGrid, 590, 300);
+		Scene statsScene = new Scene(statsGrid, gridStage.getWidth()*3/5, gridStage.getHeight()/2);
 		Stage statsStage = new Stage();
 		statsStage.setScene(statsScene);
 		statsGrid.setHgap(15);
 		statsStage.show();
 		
 		
-		// Set position of the windows on the screen
-		
-		Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
         gridStage.setX((screenBounds.getWidth() - gridStage.getWidth()));
         gridStage.setY((screenBounds.getHeight() - gridStage.getHeight()));
         
@@ -224,6 +229,7 @@ public class Main extends Application {
         statsStage.setX(screenBounds.getWidth() - gridStage.getWidth() - settStage.getWidth());
         statsStage.setY(settStage.getY() + settStage.getHeight());
 		
+        
 
 		ComboBox cb = new ComboBox();
 		cb.getItems().addAll(arr);
@@ -378,6 +384,9 @@ public class Main extends Application {
 			@Override
 			public void handle(ActionEvent arg0) {
 				int critCount = Integer.parseInt(critText.getText());
+				if(critText.getText().equals("")){
+					critCount = 1;
+				}
 				// TODO Auto-generated method stub
 				while (critCount > 0) {
 					try {
@@ -411,6 +420,18 @@ public class Main extends Application {
 					Critter.worldTimeStep();
 					count++;
 				}
+				
+				for (int i = 0; i < row; i++) {
+					for (int j = 0; j < col; j++) {
+						Rectangle rect = new Rectangle(gridSize/col, gridSize/col);
+						rect.setFill(javafx.scene.paint.Color.WHITE);
+						rect.setStroke(javafx.scene.paint.Color.LIGHTGREY);
+						rect.setStrokeWidth(.5);
+						
+			            squaresGrid.add(rect, i, j);
+					}
+				}
+				
 				//TODO: displayworld and runStats
 				Critter.displayWorld(squaresGrid);
 				statsBut.fire();
@@ -460,13 +481,13 @@ public class Main extends Application {
 					    //Handle exception
 				}
 				for (int i = 0; i < row; i++) {
-					for (int j = 0; j < row; j++) {
-						Rectangle rect = new Rectangle(gridSize/row, gridSize/row);
+					for (int j = 0; j < col; j++) {
+						Rectangle rect = new Rectangle(gridSize/col, gridSize/col);
 						rect.setFill(javafx.scene.paint.Color.WHITE);
+						rect.setStroke(javafx.scene.paint.Color.LIGHTGREY);
+						rect.setStrokeWidth(.5);
 						
-						rect.setStroke(javafx.scene.paint.Color.BLACK);
-						rect.setStrokeWidth(2);
-			            squaresGrid.add(rect, i, j); // add the shape to the squaresGrid.
+			            squaresGrid.add(rect, i, j);
 					}
 				}
 				Critter.displayWorld(squaresGrid);
@@ -549,7 +570,7 @@ public class Main extends Application {
 		settGrid.addRow(8, quitBut);
 		
 		
-		statsGrid.addRow(0, menuBar, statsBut);
-		statsGrid.addRow(1, statsText);
+		statsGrid.add(menuBar, 0, 0);
+		statsGrid.add(statsText, 0, 1);
 	}
 }

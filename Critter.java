@@ -721,20 +721,20 @@ public abstract class Critter {
 	 */
 	public static void displayWorld(Object o) {
 		GridPane grid = (GridPane) o;
-		int rows = getGridDimensions(grid)[0];
-		int cols = getGridDimensions(grid)[1];
-		double size = ((grid.getHeight() - 10*(rows + 1))/rows) - 10;
+		//int rows = getGridDimensions(grid)[0];
+		//int cols = getGridDimensions(grid)[1];
+		double size = (900 - Params.world_width*2)/Params.world_width - 2;
 		//double colSize = grid.getColumnConstraints().get(0).getPrefWidth();
 		
-		for (int i = 0; i < cols; i++) {
-			for (int j = 0; j < rows; j++) {
+		for (int i = 0; i < Params.world_width; i++) {
+			for (int j = 0; j < Params.world_height; j++) {
 				for (int c = 0; c < population.size(); c++) {
 					if (population.get(c).x_coord == i && population.get(c).y_coord == j) {
 						Shape s = getCritterShape(population.get(c), size);
 						//System.out.println(population.get(c).viewShape());
 						grid.add(s, i, j);
-						grid.setHalignment(s, HPos.CENTER);
-						grid.setValignment(s, VPos.CENTER);
+						GridPane.setHalignment(s, HPos.CENTER);
+						GridPane.setValignment(s, VPos.CENTER);
 					}
 				}
 			}
