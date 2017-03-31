@@ -79,10 +79,12 @@ public class Main extends Application {
      * and the second is test (for test output, where all output to be directed to a String), or nothing.
      */
     public static void main(String[] args){ 
+    	//get all the files in the assignment path
     	String assignmentPath = System.getProperty("user.dir") + "\\src\\" + myPackage;
 		File f = new File(assignmentPath);
 		File[] files = f.listFiles();
-		
+
+		//find the java files and add them to ArrayList so that they can be added to a combo box later
 		for (File file : files) {
 			if (file.getName().endsWith(".java")) {
 				String fileName = file.getName().substring(0, file.getName().length() - 5);
@@ -232,10 +234,13 @@ public class Main extends Application {
         statsStage.setY(settStage.getY() + settStage.getHeight());
 		
         
-
+        //Setting up the drop down menu for selecting Critters
 		ComboBox cb = new ComboBox();
 		cb.getItems().addAll(arr);
 		
+		//Setting up text boxes------------------------------------------------------
+
+		//set seed textbox
 		TextField seedText = new TextField();
 		seedText.setPromptText("INSERT #");
 		seedText.setOnMouseClicked((new EventHandler<MouseEvent>(){
@@ -247,6 +252,7 @@ public class Main extends Application {
 	 
 	    }));
 		
+		//set number of timeStep textbox
 		TextField timeText = new TextField();
 		timeText.setPromptText("INSERT #");
 		timeText.setOnMouseClicked((new EventHandler<MouseEvent>(){
@@ -258,6 +264,7 @@ public class Main extends Application {
 	 
 	    }));
 		
+		//set numer of Critters to add textbox 
 		TextField critText = new TextField();
 		critText.setPromptText("INSERT #");
 		critText.setOnMouseClicked((new EventHandler<MouseEvent>(){
@@ -268,8 +275,12 @@ public class Main extends Application {
 	          }
 	 
 	    }));
-		
 		critText.setMaxWidth(100);
+
+
+		//setting up sliders and buttons---------------------------------------------
+
+		//set up the animation speed slider
 		Slider animSpeed = new Slider(0, 10, 2);
 		animSpeed.setMinorTickCount(0);	
 		animSpeed.setShowTickMarks(true);
@@ -278,12 +289,7 @@ public class Main extends Application {
 		animSpeed.setSnapToTicks(true);
 		animSpeed.setValue(0);
 		
-//		Critter.displayWorld(critGrid);
-//		critGrid.getChildren().clear();
-		
-		Button seedBut = new Button();
-		seedBut.setText("SUBMIT");
-		
+		//set up the selection of Critters for runStats
 		Menu subsystemsMenu = null;	
 		MenuBar menuBar = new MenuBar();
 		
@@ -302,6 +308,7 @@ public class Main extends Application {
 		Button statsBut = new Button();
 		statsBut.setText("SUBMIT");
 		
+		//invoke the runStats method
 		statsBut.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -310,6 +317,7 @@ public class Main extends Application {
 				ArrayList<String> selectedItems = new ArrayList<String>();
 				statsText.clear();
 				
+				//displaying the name of Critters 
 				ByteArrayOutputStream os = new ByteArrayOutputStream();
 				for (int i = 0; i < subsystemsSize; i++) {
 					final MenuItem item = menuItems.get(i).getItems().get(0);
@@ -369,8 +377,13 @@ public class Main extends Application {
 			}
 			
 		});
-
-		seedBut.setOnAction(new EventHandler<ActionEvent>() { // what to do when butt is pressed
+		
+		//set up set seed
+		Button seedBut = new Button();
+		seedBut.setText("SUBMIT");
+		
+		//gets num from textbok and set the seed
+		seedBut.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				String prompt = seedText.getText();
@@ -380,8 +393,11 @@ public class Main extends Application {
 			}
 		});
 		
+		//set up adding Critters
 		Button critBut = new Button();
 		critBut.setText("SUBMIT");
+
+		//gets the Critter selected form the combo box and adds the Critter
 		critBut.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -393,8 +409,7 @@ public class Main extends Application {
 				} else {
 					critCount = Integer.parseInt(prompt);
 				}
-				
-				// TODO Auto-generated method stub
+
 				while (critCount > 0) {
 					try {
 						Critter.makeCritter(cb.getValue().toString());
@@ -410,57 +425,49 @@ public class Main extends Application {
 			}
 		});
 		
-
+		//sets up timeSteps 
 		Button timeBut = new Button();
 		timeBut.setText("SUBMIT");
 
-		timeBut.setOnAction(new EventHandler<ActionEvent>() { // what to do when butt is pressed
+		//gets the int from time steps text box and run that number of time steps
+		timeBut.setOnAction(new EventHandler<ActionEvent>() { 
 			@Override
 			public void handle(ActionEvent event) {
 				String prompt = timeText.getText();
 				int times = 0;
 				int count = 0;
+				//defaults to one time step if nothing is entered
 				if(prompt.equals("")){
 					times = 1;
 				}
 				else{
 					times = Integer.parseInt(prompt);
 				}
+
 				while (count < times) {
 					Critter.worldTimeStep();
 					count++;
 				}
 				
-//				for (int i = 0; i < row; i++) {
-//					for (int j = 0; j < col; j++) {
-//						Rectangle rect = new Rectangle(gridSize/col, gridSize/col);
-//						rect.setFill(javafx.scene.paint.Color.WHITE);
-//						rect.setStroke(javafx.scene.paint.Color.LIGHTGREY);
-//						rect.setStrokeWidth(.5);
-//						
-//			            critGrid.add(rect, i, j);
-//					}
-//				}
-				
-				//TODO: displayworld and runStats
 				critGrid.getChildren().retainAll(rectArr);
 				Critter.displayWorld(critGrid);
 				statsBut.fire();
 			}
 		});
 		
-		
+		//sets up the exit button 
 		Button quitBut = new Button();
 		quitBut.setText("QUIT");
 
-		quitBut.setOnAction(new EventHandler<ActionEvent>() { // what to do when butt is pressed
+		//exits out of the system when pressed 
+		quitBut.setOnAction(new EventHandler<ActionEvent>() { 
 			@Override
 			public void handle(ActionEvent event) {
 				System.exit(0);
 			}
 		});
 
-
+		//set up the two buttons for animation 
 		Button startAnimBut = new Button();
 		startAnimBut.setText("START ANIMATING");
 
@@ -468,9 +475,11 @@ public class Main extends Application {
 		endAnimBut.setText("STOP ANIMATING");
 		endAnimBut.setDisable(true);
 
+		//use animation timer to set up animation 
 		timer = new AnimationTimer() {
 			@Override
 		    public void handle(long now) {
+		    	//get the value from the animation slider 
 				animSpeed.valueProperty().addListener(new ChangeListener<Number>() {
 					public void changed(ObservableValue<? extends Number> ov,
 							Number old_val, Number new_val) {
@@ -479,7 +488,8 @@ public class Main extends Application {
 					}
 				});
 				
-				int time = speed[0];		
+				int time = speed[0];	
+
 				//animation refresh rate
 				try {
 					if(time == 0){
@@ -489,19 +499,16 @@ public class Main extends Application {
 					  Thread.sleep(1000/time);
 					}
 				} catch (InterruptedException ie) {
-					    //Handle exception
 				}
 
 				critGrid.getChildren().retainAll(rectArr);
 				Critter.displayWorld(critGrid);
 				Critter.worldTimeStep();
 				statsBut.fire();
-
-				//TODO: run stats and display world
 			}
-		};//.start();
+		};
 			
-				
+		//stops the animation timer and enable buttons after animation is over
 		endAnimBut.setOnAction(new EventHandler<ActionEvent>() { // what to do when butt is pressed
 			@Override
 			public void handle(ActionEvent event) {
@@ -530,7 +537,7 @@ public class Main extends Application {
 			
 		});
 			
-			
+		//starts the annimation timer and disable buttons to start an animation 
 		startAnimBut.setOnAction(new EventHandler<ActionEvent>() { // what to do when butt is pressed
 			@Override
 			public void handle(ActionEvent event) { 
@@ -562,7 +569,8 @@ public class Main extends Application {
 		Line line = new Line(0, 0, settGrid.getWidth(), 0);
 	    line.setStroke(Color.LIGHTGRAY);
 		
-		//settGrid.setPadding(new Insets(10, 20, 10, 20));
+		settGrid.setPadding(new Insets(10, 20, 10, 20));
+
 		settGrid.addRow(0, new Label("SET SEED"), seedText, seedBut);
 		settGrid.addRow(1, new Label("ADD CRITTER"), cb, critBut);
 		settGrid.add(critText, 1, 2);
