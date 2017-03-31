@@ -49,6 +49,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -313,9 +314,42 @@ public class Main extends Application {
 		cb.getItems().addAll(arr);
 		
 		TextField seedText = new TextField();
+		seedText.setPromptText("INSERT #");
+		seedText.setOnKeyTyped(new EventHandler<KeyEvent>() {
+
+			@Override
+			public void handle(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				seedText.setText(null);
+			}
+			
+		});
+		
 		TextField timeText = new TextField();
+		timeText.setPromptText("INSERT #");
+		timeText.setOnKeyTyped(new EventHandler<KeyEvent>() {
+
+			@Override
+			public void handle(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				timeText.setText(null);
+			}
+			
+		});
+		
 		TextField critText = new TextField();
-		critText.setMaxWidth(60);
+		critText.setPromptText("INSERT #");
+		critText.setOnKeyTyped(new EventHandler<KeyEvent>() {
+
+			@Override
+			public void handle(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				critText.setText(null);
+			}
+			
+		});
+		
+		critText.setMaxWidth(100);
 		//critText.setPrefWidth(30);
 		Slider animSpeed = new Slider(0, 10, 2);
 		animSpeed.setMinorTickCount(0);	
@@ -324,8 +358,6 @@ public class Main extends Application {
 		animSpeed.setMajorTickUnit(2);
 		animSpeed.setSnapToTicks(true);
 		
-		Critter.makeCritter("Craig");
-		Critter.makeCritter("Algae");
 		Critter.displayWorld(grid9);
 		grid9.getChildren().clear();
 
@@ -602,9 +634,7 @@ public class Main extends Application {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-				//System.out.println(output);
-				
+
 				final String output1 = output;
 				
 				byte[] b = output1.getBytes();
@@ -614,7 +644,7 @@ public class Main extends Application {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				//String output1 = os.toString("UTF8");
+
 				Platform.runLater(() -> statsText.appendText(output1));
 			}
 			
