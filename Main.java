@@ -94,161 +94,7 @@ public class Main extends Application {
      * and the second is test (for test output, where all output to be directed to a String), or nothing.
      */
     public static void main(String[] args){ 
-//        if (args.length != 0) {
-//            try {
-//                inputFile = args[0];
-//                kb = new Scanner(new File(inputFile));			
-//            } catch (FileNotFoundException e) {
-//                System.out.println("USAGE: java Main OR java Main <input file> <test output>");
-//                e.printStackTrace();
-//            } catch (NullPointerException e) {
-//                System.out.println("USAGE: java Main OR java Main <input file>  <test output>");
-//            }
-//            if (args.length >= 2) {
-//                if (args[1].equals("test")) { // if the word "test" is the second argument to java
-//                    // Create a stream to hold the output
-//                    testOutputString = new ByteArrayOutputStream();
-//                    PrintStream ps = new PrintStream(testOutputString);
-//                    // Save the old System.out.
-//                    old = System.out;
-//                    // Tell Java to use the special stream; all console output will be redirected here from now
-//                    System.setOut(ps);
-//                }
-//            }
-//        } else { // if no arguments to main
-//            kb = new Scanner(System.in); // use keyboard and console
-//        }
-//
-//        boolean stop = false; //keeps track of whether quit command has occurred 
-//    	
-//    	while(!stop){
-//    		//prompts the user the gets their input 
-//    		System.out.print("critters> ");
-//		    ArrayList<String> inputArgs = new ArrayList<String>();
-//		    String wrongCommand = kb.nextLine();
-//		    inputArgs.addAll(Arrays.asList(wrongCommand.split("\\s+")));
-//			    
-//			String command = inputArgs.get(0);
-//			
-//			try{
-//				switch (command) {
-//					//stop the program
-//					case "quit": 
-//						if(inputArgs.size()>1){
-//							System.out.println("error processing: " + wrongCommand.toString());
-//						}
-//						stop = true;
-//						break;
-//
-//					//display the current status of the Critter world 
-//					case "show": 
-//						if(inputArgs.size()>1){
-//							System.out.println("error processing: " + wrongCommand.toString());
-//						} else {
-//							Critter.displayWorld();
-//						}
-//						break;
-//					
-//					//executes a certain number of time steps
-//					case "step": 
-//						int count = 0;
-//						if(!(inputArgs.size() == 1 || inputArgs.size() == 2)) {
-//							System.out.println("error processing: " + wrongCommand.toString());
-//						}
-//						else if (inputArgs.size() == 2) {
-//							if(Integer.parseInt(inputArgs.get(1)) < 0){
-//								System.out.println("error processing: " + wrongCommand.toString());
-//							}
-//							else{
-//								while (count < Integer.parseInt(inputArgs.get(1))) {
-//									 Critter.worldTimeStep();
-//									 count++;
-//								}
-//							}
-//					    } else {
-//					    	Critter.worldTimeStep();
-//					    }
-//						break;
-//
-//					//changes the seed number for the random number generator
-//					case "seed": 
-//						if(inputArgs.size() != 2){
-//							System.out.println("error processing: " + wrongCommand.toString());
-//						}
-//						else if(Integer.parseInt(inputArgs.get(1)) < 0){
-//							System.out.println("error processing: " + wrongCommand.toString());
-//						}
-//						else{
-//							Critter.setSeed(Integer.parseInt(inputArgs.get(1)));
-//						}
-//						break;
-//
-//					//creates a concrete class of Critter
-//					case "make": 
-//						int count2 = 0;
-//						if(!(inputArgs.size() == 2 || inputArgs.size() == 3)) {
-//							System.out.println("error processing: " + wrongCommand.toString());
-//						}
-//						else if (inputArgs.size() == 3) {
-//							if(Integer.parseInt(inputArgs.get(2)) < 0){
-//								System.out.println("error processing: " + wrongCommand.toString());
-//							}
-//							else{
-//								while (count2 < Integer.parseInt(inputArgs.get(2))) {
-//									Critter.makeCritter(inputArgs.get(1));
-//									count2++;
-//								}
-//							}
-//						} else {
-//							Critter.makeCritter(inputArgs.get(1));
-//						}
-//						 break;
-//
-//					//shows the statistics for a certain concrete class of Critters
-//					case "stats": 
-//						if(inputArgs.size() != 2){
-//							System.out.println("error processing: " + wrongCommand.toString());
-//						}
-//						else{
-//							List<Critter> critList = Critter.getInstances(inputArgs.get(1));
-//							Class critterClass;
-//							Method method;
-//							
-//							try {
-//								critterClass = Class.forName(myPackage + "." + inputArgs.get(1));
-//								method = critterClass.getMethod("runStats", List.class);
-//							} catch (ClassNotFoundException e) {
-//								// TODO Auto-generated catch block
-//								throw new InvalidCritterException(inputArgs.get(1));
-//							}
-//							
-//							method.invoke(critterClass, critList);
-//						}
-//						break;
-//					default: 					
-//						System.out.println("invalid command: " + wrongCommand.toString());
-//			}
-//				
-//	    	}catch(NumberFormatException n){
-//	    		System.out.print("error processing: " + wrongCommand.toString() + "\n");
-//	    	}catch(InvalidCritterException c){
-//	    		System.out.print("error processing: " + wrongCommand.toString() + "\n");
-//	    	}catch(NoSuchMethodException e) {
-//	    		System.out.print("error processing: " + wrongCommand.toString() + "\n");
-//	    	}catch(InvocationTargetException e) {
-//	    		System.out.print("error processing: " + wrongCommand.toString() + "\n");
-//	    	}catch(IllegalAccessException e) {
-//	    		System.out.print("error processing: " + wrongCommand.toString() + "\n");
-//	    	}
-//    	}
 
-        /* Do not alter the code above for your submission. */
-        /* Write your code below. */
-        
-        // System.out.println("GLHF");
-        
-        /* Write your code above */
-        //System.out.flush();
     	String assignmentPath = System.getProperty("user.dir") + "\\src\\" + myPackage;
 		//System.out.println("Working Directory = " + assignmentPath);
 		
@@ -516,12 +362,21 @@ public class Main extends Application {
 						            	 
 					}
 				});
-						
-				int count = speed[0];
-				for(int i = 0; i < count; i++){
-					Critter.worldTimeStep();
+				
+				int time = speed[0];		
+				//animation refresh rate
+				try {
+					if(time == 0){
+						Thread.sleep(1000);
+					}
+					else{
+					  Thread.sleep(1000/time);
+					}
+				} catch (InterruptedException ie) {
+					    //Handle exception
 				}
-				System.out.println(count);
+				Critter.worldTimeStep();
+
 				//TODO: run stats and display world
 			}
 		};//.start();
@@ -548,6 +403,9 @@ public class Main extends Application {
 				
 				//disable end animation button
 				endAnimBut.setDisable(true);
+
+				//enable start animation button 
+				startAnimBut.setDisable(false);
 			}
 			
 		});
@@ -574,6 +432,9 @@ public class Main extends Application {
 				
 				//enable stop animation button
 				endAnimBut.setDisable(false);
+
+				//disable this button
+				startAnimBut.setDisable(true);
 			}
 				
 		});
