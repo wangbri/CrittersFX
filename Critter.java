@@ -104,7 +104,7 @@ public abstract class Critter {
 			}
 		}
 		
-		return null;
+		return "";
 	}
 
 	/* PROJECT 4 BEGINS HERE */
