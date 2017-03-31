@@ -43,6 +43,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -280,6 +281,13 @@ public class Main extends Application {
 		//Scene scene = new Scene(grid, 560, 560);
 		
 		Scene scene = new Scene(grid, 910, 910);
+		
+		grid.setPrefHeight(910);
+		grid.setPrefWidth(910);
+		AnchorPane.setBottomAnchor(grid, 0.0);
+		AnchorPane.setLeftAnchor(grid, 0.0);
+		AnchorPane.setRightAnchor(grid, 0.0);
+		AnchorPane.setTopAnchor(grid, 0.0);
 		
 		int gridSize = 900 - 10*row;
 		
