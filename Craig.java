@@ -55,6 +55,7 @@ public class Craig extends Critter {
 		int total_left = 0;
 		int total_right = 0;
 		int total_back = 0;
+		
 		for (Object obj : craigs) {
 			Craig c = (Craig) obj;
 			total_straight += c.genes[0];
@@ -62,6 +63,7 @@ public class Craig extends Critter {
 			total_back += c.genes[4];
 			total_left += c.genes[5] + c.genes[6] + c.genes[7];
 		}
+		
 		System.out.print("" + craigs.size() + " total Craigs    ");
 		System.out.print("" + total_straight / (GENE_TOTAL * 0.01 * craigs.size()) + "% straight   ");
 		System.out.print("" + total_back / (GENE_TOTAL * 0.01 * craigs.size()) + "% back   ");

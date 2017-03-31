@@ -23,6 +23,7 @@ import java.lang.reflect.Modifier;
 import java.nio.file.Paths;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -319,6 +320,55 @@ public class Main extends Application {
 		
 		grid.setPadding(new Insets(10, 10, 10, 10));
 		
+
+
+		
+		GridPane grid9 = new GridPane();
+		//System.out.println(grid.getHeight());
+		//System.out.println(grid.getWidth());
+		
+		ColumnConstraints column9 = new ColumnConstraints(gridSize/row);
+		for (int i = 0; i < row; i++) {
+	         
+	         //column.setPercentWidth(20);
+	         grid9.getColumnConstraints().add(column1);
+	    }
+		
+		RowConstraints row9 = new RowConstraints(gridSize/row);
+		for (int i = 0; i < row; i++) {
+	         
+	         //row.setPercentHeight(20);
+	         grid9.getRowConstraints().add(row1);
+	    }
+
+		
+		//grid.getChildren().clear(); // clean up grid.
+		
+		grid9.setHgap(10);
+		grid9.setVgap(10);
+		
+		grid9.setPadding(new Insets(10, 10, 10, 10));
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+		
+		
 //		NumberBinding rectsAreaSize = Bindings.min(grid.heightProperty(), grid.widthProperty());
 //		NumberBinding rectHeight = Bindings.add(scene.heightProperty(), 0);
 
@@ -349,7 +399,7 @@ public class Main extends Application {
 		//primaryStage.setHeight(570);
 		primaryStage.show();
 		
-		grid.setGridLinesVisible(true);
+		//grid.setGridLinesVisible(true);
 		
 		Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
 
@@ -425,7 +475,8 @@ public class Main extends Application {
 		
 		Critter.makeCritter("Craig");
 		Critter.makeCritter("Algae");
-		Critter.displayWorld(grid);
+		Critter.displayWorld(grid9);
+		grid9.getChildren().clear();
 
 		//animSpeed handler
 
@@ -602,34 +653,51 @@ public class Main extends Application {
         grid3.getRowConstraints().add(row4);
         grid3.getRowConstraints().add(row5);
         
-        ColumnConstraints column4 = new ColumnConstraints(540);
+        ColumnConstraints column4 = new ColumnConstraints(450);
         
         grid3.getColumnConstraints().add(column4);
-		grid3.setVgap(10);
 		grid3.setPadding(new Insets(10, 25, 10, 25));
 		
 		Stage tertiaryStage = new Stage();
 		tertiaryStage.setScene(scene3);
 		tertiaryStage.show();
 		
-		CheckMenuItem subsystem1 = new CheckMenuItem("Enabled");
-		subsystem1.setOnAction(new EventHandler<ActionEvent>() {
-		    public void handle(ActionEvent e) {
-		        System.out.println("subsystem1 #1 Enabled!");
-		    }
-		});
+		grid3.setHgap(15);
+		
+		
+		MenuBar menuBar = new MenuBar();
+		for (int i = 0; i < arr.size(); i++) {
+			CheckMenuItem subsystem1 = new CheckMenuItem("SHOW");
+			Menu subsystemsMenu = new Menu(arr.get(i));
+			subsystemsMenu.getItems().add(subsystem1);
+			menuBar.getMenus().add(subsystemsMenu);
+		}
+		
 
-		MenuBar menuBar = new MenuBar();	
-		Menu subsystemsMenu = new Menu("Subsystems");
-		subsystemsMenu.getItems().add(subsystem1);
-		menuBar.getMenus().add(subsystemsMenu);
-		//statsMenu.getMenus().addAll(menu1, menu1);
-		//System.out.println(arr.toString());
-		//statsMenu.getItems().addAll(arr);
-		
 		TextArea statsText = new TextArea();
+		Button statsBut = new Button();
+		statsBut.setText("SUBMIT");
 		
-		grid3.addRow(0, menuBar);
+		statsBut.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				ByteArrayOutputStream os = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(os);
+				try {
+					String output = os.toString("UTF8");
+					Platform.runLater(() -> statsText.appendText(output));
+					System.out.println("Adsfasdf");
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+		});
+		
+		
+		grid3.addRow(0, menuBar, statsBut);
 		grid3.addRow(1,  statsText);
 		// Set position of the windows on the screen
 		
