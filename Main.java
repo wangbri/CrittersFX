@@ -323,6 +323,7 @@ public class Main extends Application {
 		animSpeed.setShowTickLabels(true);
 		animSpeed.setMajorTickUnit(2);
 		animSpeed.setSnapToTicks(true);
+		animSpeed.setValue(0);
 		
 		Critter.makeCritter("Craig");
 		Critter.makeCritter("Algae");
@@ -385,7 +386,8 @@ public class Main extends Application {
 					Critter.worldTimeStep();
 					count++;
 				}
-				//displayworld and runStats
+				//TODO: displayworld and runStats
+				Critter.displayWorld(grid);
 			}
 		});
 		
@@ -432,6 +434,17 @@ public class Main extends Application {
 				} catch (InterruptedException ie) {
 					    //Handle exception
 				}
+				for (int i = 0; i < row; i++) {
+					for (int j = 0; j < row; j++) {
+						Rectangle rect = new Rectangle(gridSize/row, gridSize/row);
+						rect.setFill(javafx.scene.paint.Color.WHITE);
+						
+						rect.setStroke(javafx.scene.paint.Color.BLACK);
+						rect.setStrokeWidth(2);
+			            grid.add(rect, i, j); // add the shape to the grid.
+					}
+				}
+				Critter.displayWorld(grid);
 				Critter.worldTimeStep();
 
 				//TODO: run stats and display world
