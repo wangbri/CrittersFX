@@ -12,32 +12,19 @@ package assignment5;
  */
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.io.*;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.nio.file.Paths;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.NumberBinding;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.SnapshotParameters;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ComboBox;
@@ -48,23 +35,14 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.TilePane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.animation.AnimationTimer;
-import javafx.geometry.Insets;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
@@ -233,20 +211,12 @@ public class Main extends Application {
 				rect.setStroke(javafx.scene.paint.Color.BLACK);
 				rect.setStrokeWidth(2);
 				
-//				rect.xProperty().bind(rectsAreaSize.multiply(i).divide(5));
-//	            rect.yProperty().bind(rectsAreaSize.multiply(j).divide(5));
-//
-//	            // here we bind rectangle size to pane size 
-//	            rect.heightProperty().bind(new SimpleDoubleProperty((row.getPercentHeight()/100)*rectHeight.doubleValue()).asObject());
-//	            rect.widthProperty().bind(new SimpleDoubleProperty((column.getPercentWidth()/100)*scene.getWidth()).asObject());
-
-	            //grid.getChildren().add(rect);
 	            grid.add(rect, i, j); // add the shape to the grid.
 			}
 		}
 		
 		primaryStage.setScene(scene);
-		primaryStage.setScene(scene9);
+		//primaryStage.setScene(scene9);
 		//primaryStage.setWidth(570);
 		//primaryStage.setHeight(570);
 		primaryStage.show();
@@ -310,44 +280,41 @@ public class Main extends Application {
 		
 	  
 		ComboBox cb = new ComboBox();
-		System.out.println(arr.toString());
+		//System.out.println(arr.toString());
 		cb.getItems().addAll(arr);
 		
 		TextField seedText = new TextField();
 		seedText.setPromptText("INSERT #");
-		seedText.setOnKeyTyped(new EventHandler<KeyEvent>() {
-
-			@Override
-			public void handle(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				seedText.setText(null);
-			}
-			
-		});
+		seedText.setOnMouseClicked((new EventHandler<MouseEvent>(){
+			 
+	          @Override
+	          public void handle(MouseEvent arg0) {           
+	              seedText.setText(null);
+	          }
+	 
+	    }));
 		
 		TextField timeText = new TextField();
 		timeText.setPromptText("INSERT #");
-		timeText.setOnKeyTyped(new EventHandler<KeyEvent>() {
-
-			@Override
-			public void handle(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				timeText.setText(null);
-			}
-			
-		});
+		timeText.setOnMouseClicked((new EventHandler<MouseEvent>(){
+			 
+	          @Override
+	          public void handle(MouseEvent arg0) {           
+	              timeText.setText(null);
+	          }
+	 
+	    }));
 		
 		TextField critText = new TextField();
 		critText.setPromptText("INSERT #");
-		critText.setOnKeyTyped(new EventHandler<KeyEvent>() {
-
-			@Override
-			public void handle(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				critText.setText(null);
-			}
-			
-		});
+		critText.setOnMouseClicked((new EventHandler<MouseEvent>(){
+			 
+	          @Override
+	          public void handle(MouseEvent arg0) {           
+	              critText.setText(null);
+	          }
+	 
+	    }));
 		
 		critText.setMaxWidth(100);
 		//critText.setPrefWidth(30);
@@ -368,6 +335,92 @@ public class Main extends Application {
 		//set Seed
 		Button seedBut = new Button();
 		seedBut.setText("SUBMIT");
+		
+		Menu subsystemsMenu = null;	
+		MenuBar menuBar = new MenuBar();
+		
+		for (int i = 0; i < arr.size(); i++) {
+			CheckMenuItem subsystem1 = new CheckMenuItem("SHOW");
+			subsystemsMenu = new Menu(arr.get(i));
+			subsystemsMenu.getItems().add(subsystem1);
+			menuBar.getMenus().add(subsystemsMenu);
+		}
+		
+		ArrayList<Menu> menuItems = new ArrayList<Menu>(menuBar.getMenus());
+		int subsystemsSize = menuItems.size();
+		
+
+		TextArea statsText = new TextArea();
+		Button statsBut = new Button();
+		statsBut.setText("SUBMIT");
+		
+		statsBut.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				String output = "";
+				ArrayList<String> selectedItems = new ArrayList<String>();
+				statsText.clear();
+				
+				ByteArrayOutputStream os = new ByteArrayOutputStream();
+				for (int i = 0; i < subsystemsSize; i++) {
+					final MenuItem item = menuItems.get(i).getItems().get(0);
+					
+					if (((CheckMenuItem) item).isSelected()) {
+						selectedItems.add(menuItems.get(i).getText());
+					}
+				}
+				
+				try {
+					for (int i = 0; i < selectedItems.size(); i++) {
+						List<Critter> critList = Critter.getInstances(selectedItems.get(i));
+						Class critterClass = null;
+						Method method = null;
+						
+						try {
+							critterClass = Class.forName(myPackage + "." + selectedItems.get(i));
+							method = critterClass.getMethod("runStats", List.class);
+						} catch (ClassNotFoundException e) {
+							// TODO Auto-generated catch block
+							throw new InvalidCritterException(selectedItems.get(i));
+						} catch (NoSuchMethodException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (SecurityException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						output += method.invoke(critterClass, critList) + "\n";
+					}
+				} catch (InvalidCritterException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				final String output1 = output;
+				
+				byte[] b = output1.getBytes();
+				try {
+					os.write(b);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				statsText.setText(output1);
+				Platform.runLater(() -> statsText.setText(output1));
+			}
+			
+		});
 
 		seedBut.setOnAction(new EventHandler<ActionEvent>() { // what to do when butt is pressed
 			@Override
@@ -420,8 +473,10 @@ public class Main extends Application {
 				}
 				//TODO: displayworld and runStats
 				Critter.displayWorld(grid);
+				statsBut.fire();
 			}
 		});
+		
 		
 		//quit
 		Button quitBut = new Button();
@@ -478,6 +533,7 @@ public class Main extends Application {
 				}
 				Critter.displayWorld(grid);
 				Critter.worldTimeStep();
+				statsBut.fire();
 
 				//TODO: run stats and display world
 			}
@@ -541,6 +597,8 @@ public class Main extends Application {
 				
 		});
 		
+		
+		
 		grid2.setPadding(new Insets(10, 25, 10, 25));
 		grid2.addRow(0, new Label("SET SEED"), seedText, seedBut);
 		grid2.addRow(1, new Label("ADD CRITTER"), cb, critBut);
@@ -576,92 +634,7 @@ public class Main extends Application {
 		
 		grid3.setHgap(15);
 		
-		Menu subsystemsMenu = null;	
-		MenuBar menuBar = new MenuBar();
 		
-		for (int i = 0; i < arr.size(); i++) {
-			CheckMenuItem subsystem1 = new CheckMenuItem("SHOW");
-			subsystemsMenu = new Menu(arr.get(i));
-			subsystemsMenu.getItems().add(subsystem1);
-			menuBar.getMenus().add(subsystemsMenu);
-		}
-		
-		ArrayList<Menu> menuItems = new ArrayList<Menu>(menuBar.getMenus());
-		int subsystemsSize = menuItems.size();
-		
-
-		TextArea statsText = new TextArea();
-		Button statsBut = new Button();
-		statsBut.setText("SUBMIT");
-		
-		statsBut.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent arg0) {
-				String output = "";
-				ArrayList<String> selectedItems = new ArrayList<String>();
-				statsText.clear();
-				
-				ByteArrayOutputStream os = new ByteArrayOutputStream();
-				for (int i = 0; i < subsystemsSize; i++) {
-					final MenuItem item = menuItems.get(i).getItems().get(0);
-					
-					if (((CheckMenuItem) item).isSelected()) {
-						selectedItems.add(menuItems.get(i).getText());
-					}
-				}
-				
-				System.out.println(selectedItems);
-				
-				try {
-					for (int i = 0; i < selectedItems.size(); i++) {
-						List<Critter> critList = Critter.getInstances(selectedItems.get(i));
-						Class critterClass = null;
-						Method method = null;
-						
-						try {
-							critterClass = Class.forName(myPackage + "." + selectedItems.get(i));
-							method = critterClass.getMethod("runStats", List.class);
-						} catch (ClassNotFoundException e) {
-							// TODO Auto-generated catch block
-							throw new InvalidCritterException(selectedItems.get(i));
-						} catch (NoSuchMethodException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (SecurityException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						
-						output += method.invoke(critterClass, critList) + "\n";
-					}
-				} catch (InvalidCritterException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				final String output1 = output;
-				
-				byte[] b = output1.getBytes();
-				try {
-					os.write(b);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-				Platform.runLater(() -> statsText.appendText(output1));
-			}
-			
-		});
 		
 		
 		grid3.addRow(0, menuBar, statsBut);

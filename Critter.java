@@ -687,10 +687,24 @@ public abstract class Critter {
 			case STAR:
 				s = new Polygon();
 				((Polygon) s).getPoints().addAll(
+						size/4, size/4, //
+						
 						size/4, 0.0,
+						
+						size/2, size/4, //
+						
 						size*3/4, 0.0,
+						
+						size*3/4, size/4, //
+						
 						size, size/2,
+						
+						size*3/4, size/2, //
+						
 						size/2, size,
+						
+						size/4, size/2, //
+						
 						0.0, size/2
 				);
 				break;

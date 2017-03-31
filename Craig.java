@@ -73,13 +73,13 @@ public class Craig extends Critter {
 		output += "" + total_left / (GENE_TOTAL * 0.01 * craigs.size()) + "% left   ";
 		//System.out.println();
 		
-		System.out.println(output);
+		//System.out.println(output);
 		
 		return output;
 	}
 	
 	@Override
-	public CritterShape viewShape() { return CritterShape.SQUARE; }
+	public CritterShape viewShape() { return CritterShape.STAR; }
 
 	@Override
 	public javafx.scene.paint.Color viewOutlineColor() { return javafx.scene.paint.Color.BLUE; }
