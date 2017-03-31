@@ -51,7 +51,12 @@ public class Critter4 extends Critter{
 	public boolean fight(String opponent) {
 		//keep reproducing if it has enough energy
 		int directionCount = 0;
-		while(getEnergy()>20){
+		int direction = Critter.getRandomInt(8);
+		if(look(direction, false).equals("@")){
+			walk(direction);
+			return true;
+		}
+		else if(getEnergy()>20){
 			Critter4 baby4 = new Critter4();
 			reproduce(baby4,(directionCount+1)%8);
 		}
@@ -66,7 +71,14 @@ public class Critter4 extends Critter{
 	@Override
 	public CritterShape viewShape() {
 		// TODO Auto-generated method stub
-		return null;
+		return CritterShape.DIAMOND;
 	}
+	
+	@Override
+	public javafx.scene.paint.Color viewOutlineColor() { return javafx.scene.paint.Color.ORANGE; }
+	
+	@Override
+	public javafx.scene.paint.Color viewFillColor() { return javafx.scene.paint.Color.ORANGE; }
+
 
 }

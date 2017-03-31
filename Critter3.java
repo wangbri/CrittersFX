@@ -51,7 +51,9 @@ public class Critter3 extends Critter{
 		else{
 			turn = 0;
 			direction = Critter.getRandomInt(8);
-			run(direction);
+			if(look(direction, true).equals("@")){
+				run(direction);
+			}
 			turn++;
 		}
 		
@@ -86,7 +88,13 @@ public class Critter3 extends Critter{
 	@Override
 	public CritterShape viewShape() {
 		// TODO Auto-generated method stub
-		return null;
+		 return CritterShape.STAR;
 	}
+	
+	@Override
+	public javafx.scene.paint.Color viewOutlineColor() { return javafx.scene.paint.Color.RED; }
+	
+	@Override
+	public javafx.scene.paint.Color viewFillColor() { return javafx.scene.paint.Color.RED; }
 
 }
