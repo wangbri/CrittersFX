@@ -79,12 +79,12 @@ public class Main extends Application {
      * and the second is test (for test output, where all output to be directed to a String), or nothing.
      */
     public static void main(String[] args){ 
-    	//get all the files in the assignment path
+    	// get all the files in the assignment path
     	String assignmentPath = System.getProperty("user.dir") + "\\src\\" + myPackage;
 		File f = new File(assignmentPath);
 		File[] files = f.listFiles();
 
-		//find the java files and add them to ArrayList so that they can be added to a combo box later
+		// find the java files and add them to ArrayList so that they can be added to a combo box later
 		for (File file : files) {
 			if (file.getName().endsWith(".java")) {
 				String fileName = file.getName().substring(0, file.getName().length() - 5);
@@ -115,24 +115,23 @@ public class Main extends Application {
 		int col = Params.world_width;
 		int small = 0;
 		
-//		if (row < col) {
-//			small = col;
-//		} else {
-//			small = row;
-//		}
+		if (col < row) {
+			small = row;
+		} else {
+			small = col;
+		}
 		
 		int gridSize = (int) (screenBounds.getWidth()/2); //900
 		
 		
-		//critGrid.setGridLinesVisible(true);
 		// Set up constraints for grids
 		
-		ColumnConstraints column1 = new ColumnConstraints(gridSize/row); //700
+		ColumnConstraints column1 = new ColumnConstraints(gridSize/small); //700
 		for (int i = 0; i < col; i++) {
 	         critGrid.getColumnConstraints().add(column1);
 	    }
 		
-		RowConstraints row1 = new RowConstraints(gridSize/row); //700
+		RowConstraints row1 = new RowConstraints(gridSize/small); //700
 		for (int i = 0; i < row; i++) {
 	         critGrid.getRowConstraints().add(row1);
 	    }
@@ -142,11 +141,13 @@ public class Main extends Application {
 //		critGrid.setPadding(new Insets(2, 2, 2, 2));
 		critGrid.setAlignment(Pos.CENTER);
 		
+		
 		// Add squares for background
+		
 		ArrayList<Rectangle> rectArr = new ArrayList<Rectangle>();
 		for (int i = 0; i < col; i++) {
 			for (int j = 0; j < row; j++) {
-				Rectangle rect = new Rectangle(gridSize/row, gridSize/row);
+				Rectangle rect = new Rectangle(gridSize/small, gridSize/small);
 				rect.setFill(javafx.scene.paint.Color.WHITE);
 				rect.setStroke(javafx.scene.paint.Color.LIGHTGREY);
 				rect.setStrokeWidth(.5);
@@ -174,8 +175,6 @@ public class Main extends Application {
 		settGrid.setHgap(15);
 		settGrid.setVgap(15);
 		
-
-		
 		RowConstraints row4 = new RowConstraints(50);
 		RowConstraints row5 = new RowConstraints();
 		ColumnConstraints col6 = new ColumnConstraints();
@@ -197,8 +196,6 @@ public class Main extends Application {
 		
 		// Set up screen bounds/window positioning
 		
-		
-
 		gridStage.setX(screenBounds.getMinX());
 		gridStage.setY(screenBounds.getMinY());
 		gridStage.show();
@@ -227,12 +224,14 @@ public class Main extends Application {
 		
         
         //Setting up the drop down menu for selecting Critters
+        
 		ComboBox cb = new ComboBox();
 		cb.getItems().addAll(arr);
 		
+		
 		//Setting up text boxes------------------------------------------------------
 
-		//set seed textbox
+		// set seed textbox
 		TextField seedText = new TextField();
 		seedText.setPromptText("INSERT #");
 		seedText.setOnMouseClicked((new EventHandler<MouseEvent>(){
@@ -244,7 +243,7 @@ public class Main extends Application {
 	 
 	    }));
 		
-		//set number of timeStep textbox
+		// set number of timeStep textbox
 		TextField timeText = new TextField();
 		timeText.setPromptText("INSERT #");
 		timeText.setOnMouseClicked((new EventHandler<MouseEvent>(){
@@ -256,7 +255,7 @@ public class Main extends Application {
 	 
 	    }));
 		
-		//set number of Critters to add textbox 
+		// set number of Critters to add textbox 
 		TextField critText = new TextField();
 		critText.setPromptText("INSERT #");
 		critText.setOnMouseClicked((new EventHandler<MouseEvent>(){
@@ -270,9 +269,9 @@ public class Main extends Application {
 		critText.setMaxWidth(100);
 
 
-		//setting up sliders and buttons---------------------------------------------
+		//Setting up sliders and buttons---------------------------------------------
 
-		//set up the animation speed slider
+		// set up the animation speed slider
 		Slider animSpeed = new Slider(0, 10, 2);
 		animSpeed.setMinorTickCount(0);	
 		animSpeed.setShowTickMarks(true);
@@ -281,7 +280,7 @@ public class Main extends Application {
 		animSpeed.setSnapToTicks(true);
 		animSpeed.setValue(0);
 		
-		//set up the selection of Critters for runStats
+		// set up the selection of Critters for runStats
 		Menu subsystemsMenu = null;	
 		MenuBar menuBar = new MenuBar();
 		
@@ -300,7 +299,7 @@ public class Main extends Application {
 		Button statsBut = new Button();
 		statsBut.setText("SUBMIT");
 		
-		//invoke the runStats method
+		// invoke the runStats method
 		statsBut.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -370,11 +369,11 @@ public class Main extends Application {
 			
 		});
 		
-		//set up set seed
+		// set up set seed
 		Button seedBut = new Button();
 		seedBut.setText("SUBMIT");
 		
-		//gets num from textbox and set the seed
+		// gets num from textbox and set the seed
 		seedBut.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -385,11 +384,11 @@ public class Main extends Application {
 			}
 		});
 		
-		//set up adding Critters
+		// set up adding Critters
 		Button critBut = new Button();
 		critBut.setText("SUBMIT");
 
-		//gets the Critter selected form the combo box and adds the Critter
+		// gets the Critter selected form the combo box and adds the Critter
 		critBut.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -417,18 +416,18 @@ public class Main extends Application {
 			}
 		});
 		
-		//sets up timeSteps 
+		// sets up timeSteps 
 		Button timeBut = new Button();
 		timeBut.setText("SUBMIT");
 
-		//gets the int from time steps text box and run that number of time steps
+		// gets the int from time steps text box and run that number of time steps
 		timeBut.setOnAction(new EventHandler<ActionEvent>() { 
 			@Override
 			public void handle(ActionEvent event) {
 				String prompt = timeText.getText();
 				int times = 0;
 				int count = 0;
-				//defaults to one time step if nothing is entered
+				// defaults to one time step if nothing is entered
 				if(prompt.equals("")){
 					times = 1;
 				}
@@ -447,11 +446,11 @@ public class Main extends Application {
 			}
 		});
 		
-		//sets up the exit button 
+		// sets up the exit button 
 		Button quitBut = new Button();
 		quitBut.setText("QUIT");
 
-		//exits out of the system when pressed 
+		// exits out of the system when pressed 
 		quitBut.setOnAction(new EventHandler<ActionEvent>() { 
 			@Override
 			public void handle(ActionEvent event) {
@@ -459,7 +458,7 @@ public class Main extends Application {
 			}
 		});
 
-		//set up the two buttons for animation 
+		// set up the two buttons for animation 
 		Button startAnimBut = new Button();
 		startAnimBut.setText("START ANIMATING");
 
@@ -467,11 +466,11 @@ public class Main extends Application {
 		endAnimBut.setText("STOP ANIMATING");
 		endAnimBut.setDisable(true);
 
-		//use animation timer to set up animation 
+		// use animation timer to set up animation 
 		timer = new AnimationTimer() {
 			@Override
 		    public void handle(long now) {
-		    	//get the value from the animation slider 
+		    	// get the value from the animation slider 
 				animSpeed.valueProperty().addListener(new ChangeListener<Number>() {
 					public void changed(ObservableValue<? extends Number> ov,
 							Number old_val, Number new_val) {
@@ -482,7 +481,7 @@ public class Main extends Application {
 				
 				int time = speed[0];	
 
-				//animation refresh rate
+				// animation refresh rate
 				try {
 					if(time == 0){
 						Thread.sleep(1000);
@@ -500,65 +499,65 @@ public class Main extends Application {
 			}
 		};
 			
-		//stops the animation timer and enable buttons after animation is over
+		// stops the animation timer and enable buttons after animation is over
 		endAnimBut.setOnAction(new EventHandler<ActionEvent>() { // what to do when butt is pressed
 			@Override
 			public void handle(ActionEvent event) {
-				//animation[0] = false;
+				// animation[0] = false;
 				timer.stop();
 				
-				//enable the makeCritter button and dropdown 
+				// enable the makeCritter button and dropdown 
 				cb.setDisable(false);
 				critBut.setDisable(false);
 				critText.setDisable(false);
 				
-				//enable the timeStep button and textbox
+				// enable the timeStep button and textbox
 				timeBut.setDisable(false);
 				timeText.setDisable(false);
 					
-				//enable the setSeed button and textbox
+				// enable the setSeed button and textbox
 				seedBut.setDisable(false);
 				seedText.setDisable(false);
 				
-				//disable end animation button
+				// disable end animation button
 				endAnimBut.setDisable(true);
 
-				//enable start animation button 
+				// enable start animation button 
 				startAnimBut.setDisable(false);
 			}
 			
 		});
 			
-		//starts the animation timer and disable buttons to start an animation 
+		// starts the animation timer and disable buttons to start an animation 
 		startAnimBut.setOnAction(new EventHandler<ActionEvent>() { // what to do when butt is pressed
 			@Override
 			public void handle(ActionEvent event) { 
-				//animation[0] = true;
+				// animation[0] = true;
 				timer.start();
 					
-				//gray out the makeCritter button and dropdown 
+				// gray out the makeCritter button and dropdown 
 				cb.setDisable(true);
 				critBut.setDisable(true);
 				critText.setDisable(true);
 				
-				//gray out the timeStep button and textbox
+				// gray out the timeStep button and textbox
 				timeBut.setDisable(true);
 				timeText.setDisable(true);
 					
-				//gray out the setSeed button and textbox
+				// gray out the setSeed button and textbox
 				seedBut.setDisable(true);
 				seedText.setDisable(true);
 				
-				//enable stop animation button
+				// enable stop animation button
 				endAnimBut.setDisable(false);
 
-				//disable this button
+				// disable this button
 				startAnimBut.setDisable(true);
 			}
 				
 		});
 
-		Line line = new Line(0, 0, settGrid.getWidth(), 0);
+		Line line = new Line(0, 0, gridStage.getWidth()*3/5 - 70, 0);
 	    line.setStroke(Color.LIGHTGRAY);
 		
 		settGrid.setPadding(new Insets(10, 20, 10, 20));
@@ -574,7 +573,6 @@ public class Main extends Application {
 		settGrid.addRow(7);
 		settGrid.addRow(8, quitBut);	
 		settGrid.setAlignment(Pos.TOP_CENTER);
-		//settGrid.setGridLinesVisible(true);
 		
 		statsGrid.add(menuBar, 0, 0);
 		statsGrid.add(statsText, 0, 1);

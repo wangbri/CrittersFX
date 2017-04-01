@@ -748,8 +748,8 @@ public abstract class Critter {
 			for (int j = 0; j < Params.world_height; j++) {
 				for (int c = 0; c < population.size(); c++) {
 					if (population.get(c).x_coord == i && population.get(c).y_coord == j) {
-						Shape s = getCritterShape(population.get(c), gridSize/small);
-						grid.add(s, 99, 39);
+						Shape s = getCritterShape(population.get(c), gridSize/small - 4);
+						grid.add(s, i, j);
 						GridPane.setHalignment(s, HPos.CENTER);
 						GridPane.setValignment(s, VPos.CENTER);
 					}

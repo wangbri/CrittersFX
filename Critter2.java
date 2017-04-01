@@ -11,6 +11,8 @@ package assignment5;
  * Fall 2016
  */
 
+import assignment5.Critter.CritterShape;
+
 /**
  * A custom Critter that reproduces Critters around it when encountered and runs away afterwards
  */
@@ -40,6 +42,12 @@ public class Critter2 extends Critter {
 	@Override
 	public CritterShape viewShape() {
 		// TODO Auto-generated method stub
-		return null;
+		return CritterShape.CIRCLE;
 	}
+	
+	@Override
+	public javafx.scene.paint.Color viewOutlineColor() { return javafx.scene.paint.Color.LAVENDER; }
+	
+	@Override
+	public javafx.scene.paint.Color viewFillColor() { return javafx.scene.paint.Color.LAVENDER; }
 }
