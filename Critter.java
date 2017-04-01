@@ -736,14 +736,20 @@ public abstract class Critter {
 	public static void displayWorld(Object o) {
 		GridPane grid = (GridPane) o;
 		Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-		int gridSize = (int) (screenBounds.getWidth()/2 - Params.world_width*2); //900
+		int gridSize = (int) (screenBounds.getWidth()/2); //900
+		int small = 0;
+		if (Params.world_height < Params.world_width) {
+			small = Params.world_width;
+		} else {
+			small = Params.world_height;
+		}
 		
 		for (int i = 0; i < Params.world_width; i++) {
 			for (int j = 0; j < Params.world_height; j++) {
 				for (int c = 0; c < population.size(); c++) {
 					if (population.get(c).x_coord == i && population.get(c).y_coord == j) {
-						Shape s = getCritterShape(population.get(c), gridSize/Params.world_width);
-						grid.add(s, i, j);
+						Shape s = getCritterShape(population.get(c), gridSize/small);
+						grid.add(s, 99, 39);
 						GridPane.setHalignment(s, HPos.CENTER);
 						GridPane.setValignment(s, VPos.CENTER);
 					}

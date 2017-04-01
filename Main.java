@@ -113,33 +113,40 @@ public class Main extends Application {
 			
 		int row = Params.world_height;	
 		int col = Params.world_width;
+		int small = 0;
+		
+//		if (row < col) {
+//			small = col;
+//		} else {
+//			small = row;
+//		}
+		
 		int gridSize = (int) (screenBounds.getWidth()/2); //900
 		
 		
 		//critGrid.setGridLinesVisible(true);
 		// Set up constraints for grids
 		
-		ColumnConstraints column1 = new ColumnConstraints(gridSize/col); //700
+		ColumnConstraints column1 = new ColumnConstraints(gridSize/row); //700
 		for (int i = 0; i < col; i++) {
 	         critGrid.getColumnConstraints().add(column1);
 	    }
 		
-		RowConstraints row1 = new RowConstraints(gridSize/col); //700
+		RowConstraints row1 = new RowConstraints(gridSize/row); //700
 		for (int i = 0; i < row; i++) {
 	         critGrid.getRowConstraints().add(row1);
 	    }
 		
 //		critGrid.setHgap(2);
 //		critGrid.setVgap(2);	
-		//critGrid.setPadding(new Insets(2, 2, 2, 2));
+//		critGrid.setPadding(new Insets(2, 2, 2, 2));
 		critGrid.setAlignment(Pos.CENTER);
-		
 		
 		// Add squares for background
 		ArrayList<Rectangle> rectArr = new ArrayList<Rectangle>();
-		for (int i = 0; i < row; i++) {
-			for (int j = 0; j < col; j++) {
-				Rectangle rect = new Rectangle(gridSize/col, gridSize/col);
+		for (int i = 0; i < col; i++) {
+			for (int j = 0; j < row; j++) {
+				Rectangle rect = new Rectangle(gridSize/row, gridSize/row);
 				rect.setFill(javafx.scene.paint.Color.WHITE);
 				rect.setStroke(javafx.scene.paint.Color.LIGHTGREY);
 				rect.setStrokeWidth(.5);
@@ -150,21 +157,6 @@ public class Main extends Application {
 		}
 		
 		critGrid.getChildren().retainAll(rectArr);
-		
-		
-//		ColumnConstraints column9 = new ColumnConstraints(gridSize/row); //700
-//		for (int i = 0; i < col; i++) {
-//	         critGrid.getColumnConstraints().add(column9);
-//	    }
-//		
-//		RowConstraints row9 = new RowConstraints(gridSize/row); //700
-//		for (int i = 0; i < row; i++) {
-//	         critGrid.getRowConstraints().add(row9);
-//	    }
-//		
-//		critGrid.setHgap(10);
-//		critGrid.setVgap(10);		
-//		critGrid.setPadding(new Insets(10, 10, 10, 10));
 		
 		ColumnConstraints column2 = new ColumnConstraints();
 		column2.setPercentWidth(40);
@@ -264,7 +256,7 @@ public class Main extends Application {
 	 
 	    }));
 		
-		//set numer of Critters to add textbox 
+		//set number of Critters to add textbox 
 		TextField critText = new TextField();
 		critText.setPromptText("INSERT #");
 		critText.setOnMouseClicked((new EventHandler<MouseEvent>(){
@@ -382,7 +374,7 @@ public class Main extends Application {
 		Button seedBut = new Button();
 		seedBut.setText("SUBMIT");
 		
-		//gets num from textbok and set the seed
+		//gets num from textbox and set the seed
 		seedBut.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -537,7 +529,7 @@ public class Main extends Application {
 			
 		});
 			
-		//starts the annimation timer and disable buttons to start an animation 
+		//starts the animation timer and disable buttons to start an animation 
 		startAnimBut.setOnAction(new EventHandler<ActionEvent>() { // what to do when butt is pressed
 			@Override
 			public void handle(ActionEvent event) { 
@@ -582,7 +574,7 @@ public class Main extends Application {
 		settGrid.addRow(7);
 		settGrid.addRow(8, quitBut);	
 		settGrid.setAlignment(Pos.TOP_CENTER);
-		settGrid.setGridLinesVisible(true);
+		//settGrid.setGridLinesVisible(true);
 		
 		statsGrid.add(menuBar, 0, 0);
 		statsGrid.add(statsText, 0, 1);
